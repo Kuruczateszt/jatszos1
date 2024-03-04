@@ -27,5 +27,13 @@ namespace wshop3.Controllers
             }
             return Ok(felhasznalo);
         }
+
+        [HttpPost]
+        public IActionResult FelhasznaloHozzaadas([FromBody] Felhasznalok felhasznalo)
+        {
+            _whop3Context.Felhasznaloks.Add(felhasznalo);
+            _whop3Context.SaveChanges();
+            return Ok();
+        }
     }
 }

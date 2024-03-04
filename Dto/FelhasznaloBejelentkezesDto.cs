@@ -10,7 +10,5 @@ namespace wshop3.Dto
         public string Nev { get; set; } = null!;
 
         public string Jelszo { get; set; } = null!;
-
-        public string Email { get; set; } = null!;
     }
 }

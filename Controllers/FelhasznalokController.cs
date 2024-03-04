@@ -74,5 +74,22 @@ namespace wshop3.Controllers
             _whop3Context.SaveChanges();
             return Ok();
         }
+
+        [HttpPost("Bejelentkezes")]
+        public IActionResult FelhasznaloBejelentkezesDto(FelhasznaloBejelentkezesDto felhasznaloAdatok)
+        {
+            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(felhasznaloAdatok.Jelszo));
+
+            var felhasznalo = _whop3Context.Felhasznaloks.FirstOrDefault(f => f.Nev == felhasznaloAdatok.Nev && f.Jelszo == Convert.ToBase64String(hash));
+
+            if (felhasznalo == null)
+            {
+                return BadRequest("Felhasználónév vagy jelszó nem megfelelő");
+            }
+
+            //később módosítani tokenre
+            return Ok(felhasznalo);
+
+        }
     }
 }

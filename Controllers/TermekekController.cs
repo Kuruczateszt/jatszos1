@@ -32,7 +32,7 @@ namespace wshop3.Controller
         [HttpGet]
         public IActionResult OsszesTermek()
         {
-            var termekek = _whop3Context.Termekeks;
+            var termekek = _whop3Context.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep);
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");

@@ -40,5 +40,18 @@ namespace wshop3.Controller
             return Ok(termekek);
         }
 
+        [HttpDelete("id")]
+        public IActionResult TermekTorles([FromRoute] int id)
+        {
+            var termek = _whop3Context.Termekeks.FirstOrDefault(t => t.Id == id);
+            if (termek == null)
+            {
+                return BadRequest("Nincs ilyen termek");
+            }
+            _whop3Context.Termekeks.Remove(termek);
+            _whop3Context.SaveChanges();
+            return Ok();
+        }
+
     }
 }

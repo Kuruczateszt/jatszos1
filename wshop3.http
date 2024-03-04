@@ -1,0 +1,6 @@
+@wshop3_HostAddress = http://localhost:5130
+
+GET {{wshop3_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

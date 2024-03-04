@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace wshop3.Controllers
 {
-    public class FelhasznalokController
+    public class KategoriakController
     {
         
     }

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using wshop3.Model;
@@ -31,6 +34,9 @@ namespace wshop3.Controllers
         [HttpPost]
         public IActionResult FelhasznaloHozzaadas([FromBody] Felhasznalok felhasznalo)
         {
+            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(felhasznalo.Jelszo));
+            felhasznalo.Jelszo = Convert.ToBase64String(hash);
+
             _whop3Context.Felhasznaloks.Add(felhasznalo);
             _whop3Context.SaveChanges();
             return Ok();

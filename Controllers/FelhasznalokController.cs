@@ -55,8 +55,6 @@ namespace wshop3.Controllers
                 Nev = felhasznalo.Nev
             };
 
-            System.Console.WriteLine(ujfelhasznalo);
-
             _whop3Context.Felhasznaloks.Add(ujfelhasznalo);
             _whop3Context.SaveChanges();
             return Ok();

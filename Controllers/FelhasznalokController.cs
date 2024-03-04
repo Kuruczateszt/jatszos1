@@ -6,12 +6,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using wshop3.Dto;
 using wshop3.Model;
 
 namespace wshop3.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class FelhasznalokController : ControllerBase
     {
         private readonly Wshop3Context _whop3Context;
@@ -31,13 +32,32 @@ namespace wshop3.Controllers
             return Ok(felhasznalo);
         }
 
-        [HttpPost]
-        public IActionResult FelhasznaloHozzaadas([FromBody] Felhasznalok felhasznalo)
+        [HttpGet]
+        public IActionResult OsszesFelhasznalo()
+        {
+            var felhasznalok = _whop3Context.Felhasznaloks;
+            if (felhasznalok.Count() == 0)
+            {
+                return BadRequest("Nincsenek felhasználók");
+            }
+            return Ok(felhasznalok);
+        }
+
+        [HttpPost("FelhasznaloHozzaadas")]
+        public IActionResult FelhasznaloHozzaadas([FromBody] FelhasznaloLetrehozDto felhasznalo)
         {
             var hash = SHA256.HashData(Encoding.UTF8.GetBytes(felhasznalo.Jelszo));
-            felhasznalo.Jelszo = Convert.ToBase64String(hash);
 
-            _whop3Context.Felhasznaloks.Add(felhasznalo);
+            var ujfelhasznalo = new Felhasznalok
+            {
+                Email = felhasznalo.Email,
+                Jelszo = Convert.ToBase64String(hash),
+                Nev = felhasznalo.Nev
+            };
+
+            System.Console.WriteLine(ujfelhasznalo);
+
+            _whop3Context.Felhasznaloks.Add(ujfelhasznalo);
             _whop3Context.SaveChanges();
             return Ok();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using wshop3.Model;
 
 namespace wshop3.Controller
@@ -15,6 +16,17 @@ namespace wshop3.Controller
         public TermekekController(Wshop3Context whop3Context)
         {
             _whop3Context = whop3Context;
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult TermekekId([FromRoute] int id)
+        {
+            var termek = _whop3Context.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).FirstOrDefault(t => t.Id == id);
+            if (termek == null)
+            {
+                return BadRequest("Nincs ilyen termek");
+            }
+            return Ok(termek);
         }
 
         [HttpGet]

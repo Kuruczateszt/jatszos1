@@ -33,9 +33,10 @@ namespace wshop3.Controllers
         }
 
         [HttpGet]
+        [Route("OsszesFelhasznalo")]
         public IActionResult OsszesFelhasznalo()
         {
-            var felhasznalok = _whop3Context.Felhasznaloks;
+            var felhasznalok = _whop3Context.Felhasznaloks.ToList();
             if (felhasznalok.Count() == 0)
             {
                 return BadRequest("Nincsenek felhasználók");

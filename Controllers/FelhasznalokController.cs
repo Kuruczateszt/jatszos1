@@ -21,7 +21,7 @@ namespace wshop3.Controllers
             _whop3Context = whop3Context;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("FelhasznaloId/{id}")]
         public IActionResult FelhasznaloId([FromRoute] int id)
         {
             var felhasznalo = _whop3Context.Felhasznaloks.FirstOrDefault(f => f.Id == id);
@@ -32,8 +32,7 @@ namespace wshop3.Controllers
             return Ok(felhasznalo);
         }
 
-        [HttpGet]
-        [Route("OsszesFelhasznalo")]
+        [HttpGet("OsszesFelhasznalo")]
         public IActionResult OsszesFelhasznalo()
         {
             var felhasznalok = _whop3Context.Felhasznaloks.ToList();
@@ -59,6 +58,19 @@ namespace wshop3.Controllers
             System.Console.WriteLine(ujfelhasznalo);
 
             _whop3Context.Felhasznaloks.Add(ujfelhasznalo);
+            _whop3Context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult FelhasznaloTorles([FromRoute] int id)
+        {
+            var felhasznalo = _whop3Context.Felhasznaloks.FirstOrDefault(f => f.Id == id);
+            if (felhasznalo == null)
+            {
+                return BadRequest("Nincs ilyen felhasználó");
+            }
+            _whop3Context.Felhasznaloks.Remove(felhasznalo);
             _whop3Context.SaveChanges();
             return Ok();
         }

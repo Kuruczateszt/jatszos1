@@ -24,6 +24,8 @@ public partial class Wshop3Context : DbContext
 
     public virtual DbSet<Rendelesek> Rendeleseks { get; set; }
 
+    public virtual DbSet<TermekKepek> TermekKepeks { get; set; }
+
     public virtual DbSet<Termekek> Termekeks { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -133,6 +135,23 @@ public partial class Wshop3Context : DbContext
                 .HasConstraintName("rendelesek_ibfk_2");
         });
 
+        modelBuilder.Entity<TermekKepek>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("termek_kepek");
+
+            entity.HasIndex(e => e.TermekId, "termek_id");
+
+            entity.Property(e => e.Id)
+                .HasColumnType("int(11)")
+                .HasColumnName("id");
+            entity.Property(e => e.Kep).HasColumnName("kep");
+            entity.Property(e => e.TermekId)
+                .HasColumnType("int(11)")
+                .HasColumnName("termek_id");
+        });
+
         modelBuilder.Entity<Termekek>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -140,6 +159,8 @@ public partial class Wshop3Context : DbContext
             entity.ToTable("termekek");
 
             entity.HasIndex(e => e.KategoriaId, "kategoria_id");
+
+            entity.HasIndex(e => e.TermekKepId, "termek_kep_id");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -156,10 +177,17 @@ public partial class Wshop3Context : DbContext
             entity.Property(e => e.Nev)
                 .HasMaxLength(100)
                 .HasColumnName("nev");
+            entity.Property(e => e.TermekKepId)
+                .HasColumnType("int(11)")
+                .HasColumnName("termek_kep_id");
 
             entity.HasOne(d => d.Kategoria).WithMany(p => p.Termekeks)
                 .HasForeignKey(d => d.KategoriaId)
                 .HasConstraintName("termekek_ibfk_1");
+
+            entity.HasOne(d => d.TermekKep).WithMany(p => p.Termekeks)
+                .HasForeignKey(d => d.TermekKepId)
+                .HasConstraintName("termekek_ibfk_2");
         });
 
         OnModelCreatingPartial(modelBuilder);

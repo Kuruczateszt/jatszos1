@@ -12,16 +12,16 @@ namespace wshop3.Controllers
     [Route("api/[controller]")]
     public class KosarController : ControllerBase
     {
-        private readonly Wshop3Context _wshop3c;
+        private readonly Wshop3Context _ws3;
         public KosarController(Wshop3Context whop3Context)
         {
-            _wshop3c = whop3Context;
+            _ws3 = whop3Context;
         }
 
         [HttpGet("{id}")]
         public IActionResult KosarId([FromRoute] int id)
         {
-            var kosar = _wshop3c.Kosars
+            var kosar = _ws3.Kosars
             .Include(k => k.Termek)
             .Include(f => f.Felhasznalo)
             .FirstOrDefault(k => k.Id == id);

@@ -15,16 +15,16 @@ namespace wshop3.Controllers
     [Route("api/[controller]")]
     public class FelhasznalokController : ControllerBase
     {
-        private readonly Wshop3Context _whop3Context;
+        private readonly Wshop3Context _ws3;
         public FelhasznalokController(Wshop3Context whop3Context)
         {
-            _whop3Context = whop3Context;
+            _ws3 = whop3Context;
         }
 
         [HttpGet("FelhasznaloId/{id}")]
         public IActionResult FelhasznaloId([FromRoute] int id)
         {
-            var felhasznalo = _whop3Context.Felhasznaloks.FirstOrDefault(f => f.Id == id);
+            var felhasznalo = _ws3.Felhasznaloks.FirstOrDefault(f => f.Id == id);
             if (felhasznalo == null)
             {
                 return BadRequest("Nincs ilyen felhasználó");
@@ -35,7 +35,7 @@ namespace wshop3.Controllers
         [HttpGet("OsszesFelhasznalo")]
         public IActionResult OsszesFelhasznalo()
         {
-            var felhasznalok = _whop3Context.Felhasznaloks.ToList();
+            var felhasznalok = _ws3.Felhasznaloks.ToList();
             if (felhasznalok.Count() == 0)
             {
                 return BadRequest("Nincsenek felhasználók");
@@ -55,21 +55,21 @@ namespace wshop3.Controllers
                 Nev = felhasznalo.Nev
             };
 
-            _whop3Context.Felhasznaloks.Add(ujfelhasznalo);
-            _whop3Context.SaveChanges();
+            _ws3.Felhasznaloks.Add(ujfelhasznalo);
+            _ws3.SaveChanges();
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult FelhasznaloTorles([FromRoute] int id)
         {
-            var felhasznalo = _whop3Context.Felhasznaloks.FirstOrDefault(f => f.Id == id);
+            var felhasznalo = _ws3.Felhasznaloks.FirstOrDefault(f => f.Id == id);
             if (felhasznalo == null)
             {
                 return BadRequest("Nincs ilyen felhasználó");
             }
-            _whop3Context.Felhasznaloks.Remove(felhasznalo);
-            _whop3Context.SaveChanges();
+            _ws3.Felhasznaloks.Remove(felhasznalo);
+            _ws3.SaveChanges();
             return Ok();
         }
 
@@ -78,7 +78,7 @@ namespace wshop3.Controllers
         {
             var hash = SHA256.HashData(Encoding.UTF8.GetBytes(felhasznaloAdatok.Jelszo));
 
-            var felhasznalo = _whop3Context.Felhasznaloks.FirstOrDefault(f => f.Nev == felhasznaloAdatok.Nev && f.Jelszo == Convert.ToBase64String(hash));
+            var felhasznalo = _ws3.Felhasznaloks.FirstOrDefault(f => f.Nev == felhasznaloAdatok.Nev && f.Jelszo == Convert.ToBase64String(hash));
 
             if (felhasznalo == null)
             {

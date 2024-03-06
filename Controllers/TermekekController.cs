@@ -12,16 +12,16 @@ namespace wshop3.Controller
     [Route("api/[controller]")]
     public class TermekekController : ControllerBase
     {
-        private readonly Wshop3Context _whop3c;
+        private readonly Wshop3Context _ws3;
         public TermekekController(Wshop3Context whop3Context)
         {
-            _whop3c = whop3Context;
+            _ws3 = whop3Context;
         }
 
         [HttpGet("{id}")]
         public IActionResult TermekekId([FromRoute] int id)
         {
-            var termek = _whop3c.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).FirstOrDefault(t => t.Id == id);
+            var termek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).FirstOrDefault(t => t.Id == id);
             if (termek == null)
             {
                 return BadRequest("Nincs ilyen termek");
@@ -32,7 +32,7 @@ namespace wshop3.Controller
         [HttpGet]
         public IActionResult OsszesTermek()
         {
-            var termekek = _whop3c.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep);
+            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep);
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");
@@ -43,13 +43,13 @@ namespace wshop3.Controller
         [HttpDelete("id")]
         public IActionResult TermekTorles([FromRoute] int id)
         {
-            var termek = _whop3c.Termekeks.FirstOrDefault(t => t.Id == id);
+            var termek = _ws3.Termekeks.FirstOrDefault(t => t.Id == id);
             if (termek == null)
             {
                 return BadRequest("Nincs ilyen termek");
             }
-            _whop3c.Termekeks.Remove(termek);
-            _whop3c.SaveChanges();
+            _ws3.Termekeks.Remove(termek);
+            _ws3.SaveChanges();
             return Ok();
         }
 

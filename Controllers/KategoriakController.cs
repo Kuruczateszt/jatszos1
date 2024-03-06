@@ -10,10 +10,10 @@ namespace wshop3.Controllers
     [ApiController]
     public class KategoriakController : ControllerBase
     {
-        private readonly Wshop3Context _whop3c;
+        private readonly Wshop3Context _ws3;
         public KategoriakController(Wshop3Context whop3Context)
         {
-            _whop3c = whop3Context;
+            _ws3 = whop3Context;
         }
     }
 }

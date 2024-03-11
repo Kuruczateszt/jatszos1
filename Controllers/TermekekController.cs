@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using wshop3.Dto;
 using wshop3.Model;
 
 namespace wshop3.Controller
@@ -53,5 +54,20 @@ namespace wshop3.Controller
             return Ok();
         }
 
+        [HttpPost]
+        public IActionResult TermekUj([FromBody] TermekLetrehozDto termek)
+        {
+            var UjTermek = new Termekek
+            {
+                Nev = termek.Nev,
+                Ar = termek.Ar,
+                Leiras = termek.Leiras,
+                KategoriaId = termek.KategoriaId
+            };
+
+            _ws3.Add(UjTermek);
+            _ws3.SaveChanges();
+            return Ok(UjTermek);
+        }
     }
 }

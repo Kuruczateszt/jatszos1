@@ -29,6 +29,17 @@ namespace wshop3.Controllers
             return Ok(kategoria);
         }
 
+        [HttpGet("OsszesKategoria")]
+        public IActionResult OsszesKategoria()
+        {
+            var kategoriak = _ws3.Kategoriaks;
+            if (kategoriak.Count() == 0)
+            {
+                return BadRequest("Nincsenek kategóriak");
+            }
+            return Ok(kategoriak);
+        }
+
         [HttpPut("/kategoriaUJ")]
         public IActionResult kategoriaUj([FromBody] KategoriakDto kategoriaDto)
         {

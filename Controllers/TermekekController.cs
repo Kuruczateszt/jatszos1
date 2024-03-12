@@ -56,7 +56,7 @@ namespace wshop3.Controller
 
         [HttpPost]
         public IActionResult TermekUj([FromForm] IFormCollection termekAdatok)
-        //curl -X POST "http://localhost:5130/api/Termekek" -F "Nev=Whiskyvalami" -F "Ar=10,9" -F "KategoriaId=1" -F "Kep=product_005.webp"
+        //curl -X POST "http://localhost:5130/api/Termekek" -F "Nev=Whiskyvalami11" -F "Ar=10,9" -F "KategoriaId=1" -F "Kep=@product_005.webp"
         {
             var termek = new Termekek
             {

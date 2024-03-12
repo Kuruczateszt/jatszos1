@@ -18,7 +18,7 @@ namespace wshop3.Controllers
             _ws3 = whop3Context;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("KategoriaId/{id}")]
         public IActionResult KategoriaId([FromRoute] int id)
         {
             var kategoria = _ws3.Kategoriaks.FirstOrDefault(k => k.Id == id);
@@ -40,7 +40,7 @@ namespace wshop3.Controllers
             return Ok(kategoriak);
         }
 
-        [HttpPut("/kategoriaUJ")]
+        [HttpPut("kategoriaUJ")]
         public IActionResult kategoriaUj([FromBody] KategoriakDto kategoriaDto)
         {
             if (kategoriaDto.Nev == string.Empty)

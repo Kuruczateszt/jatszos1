@@ -55,19 +55,35 @@ namespace wshop3.Controller
         }
 
         [HttpPost]
-        public IActionResult TermekUj([FromBody] TermekLetrehozDto termek)
+        public IActionResult TermekUj([FromForm] IFormCollection termekAdatok)
         {
-            var UjTermek = new Termekek
+            var termek = new Termekek
             {
-                Nev = termek.Nev,
-                Ar = termek.Ar,
-                Leiras = termek.Leiras,
-                KategoriaId = termek.KategoriaId
+                Nev = termekAdatok["Nev"],
+                Ar = Convert.ToDecimal(termekAdatok["Ar"]),
+                KategoriaId = Convert.ToInt32(termekAdatok["KategoriaId"])
             };
 
-            _ws3.Add(UjTermek);
+            var kep = new TermekKepek();
+
+            IFormFile file = termekAdatok.Files["Kep"];
+
+            if (file != null && file.Length > 0)
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    file.CopyTo(memoryStream);
+                    kep.Kep = memoryStream.ToArray();
+                }
+            }
+
+            _ws3.TermekKepeks.Add(kep);
             _ws3.SaveChanges();
-            return Ok(UjTermek);
+
+            termek.TermekKepId = kep.Id;
+            _ws3.Termekeks.Add(termek);
+            _ws3.SaveChanges();
+            return Ok("termék rögzívte");
         }
     }
 }

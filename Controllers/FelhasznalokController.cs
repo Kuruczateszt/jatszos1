@@ -60,7 +60,7 @@ namespace wshop3.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("FelhasznaloTorles/{id}")]
         public IActionResult FelhasznaloTorles([FromRoute] int id)
         {
             var felhasznalo = _ws3.Felhasznaloks.FirstOrDefault(f => f.Id == id);

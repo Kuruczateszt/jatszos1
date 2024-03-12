@@ -9,8 +9,14 @@ namespace wshop3.Dto
     public class TermekLetrehozDto
     {
         public string Nev { get; set; }
+
         public decimal Ar { get; set; }
+
         public string? Leiras { get; set; }
+
         public int? KategoriaId { get; set; }
+
+        public string Kep { get; set; }
+
     }
 }

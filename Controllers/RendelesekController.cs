@@ -17,6 +17,17 @@ namespace wshop3.Controllers
             _ws3 = wshop3Context;
         }
 
+        [HttpGet("{id}")]
+        public IActionResult rendelesekId([FromRoute] int id)
+        {
+            var rendeles = _ws3.Rendeleseks.Where(r => r.Id == id);
+            if (rendeles == null)
+            {
+                return BadRequest("Nincs ilyen renelés");
+            }
+            return Ok(rendeles);
+        }
+
         [HttpGet]
         public IActionResult OsszesRendelesek()
         {

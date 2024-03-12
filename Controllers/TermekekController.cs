@@ -74,6 +74,12 @@ namespace wshop3.Controller
                 return BadRequest("Nincs megadva kep");
             }
 
+            //5 MB maximum
+            if (file.Length > 5242880)
+            {
+                return BadRequest("File mérete nem lehet nagyobb mint 5mb");
+            }
+
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 file.CopyTo(memoryStream);

@@ -18,6 +18,17 @@ namespace wshop3.Controllers
             _ws3 = whop3Context;
         }
 
+        [HttpGet("{id}")]
+        public IActionResult KategoriaId([FromRoute] int id)
+        {
+            var kategoria = _ws3.Kategoriaks.FirstOrDefault(k => k.Id == id);
+            if (kategoria == null)
+            {
+                return BadRequest("Nincs ilyen kategória");
+            }
+            return Ok(kategoria);
+        }
+
         [HttpPut("/kategoriaUJ")]
         public IActionResult kategoriaUj([FromBody] KategoriakDto kategoriaDto)
         {

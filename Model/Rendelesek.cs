@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 
 namespace wshop3.Model;
-
 public partial class Rendelesek
 {
+
     public int Id { get; set; }
 
     public int? FelhasznaloId { get; set; }

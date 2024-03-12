@@ -69,13 +69,15 @@ namespace wshop3.Controller
 
             IFormFile file = termekAdatok.Files["Kep"];
 
-            if (file != null && file.Length > 0)
+            if (file == null || file.Length == 0)
             {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    file.CopyTo(memoryStream);
-                    kep.Kep = memoryStream.ToArray();
-                }
+                return BadRequest("Nincs megadva kep");
+            }
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                kep.Kep = memoryStream.ToArray();
             }
 
             _ws3.TermekKepeks.Add(kep);

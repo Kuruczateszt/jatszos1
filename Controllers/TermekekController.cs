@@ -30,15 +30,35 @@ namespace wshop3.Controller
             return Ok(termek);
         }
 
-        [HttpGet]
+        [HttpGet("OsszesTermek")]
         public IActionResult OsszesTermek()
         {
-            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep);
+            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).ToList();
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");
             }
-            return Ok(termekek);
+
+            var vissza = new List<TermekOsszesLekerdezDto>();
+
+            foreach (var termek in termekek)
+            {
+                var t = new TermekOsszesLekerdezDto()
+                {
+                    Id = termek.Id,
+                    Nev = termek.Nev,
+                    Ar = termek.Ar,
+                    Leiras = termek.Leiras,
+                    Kategoria = termek.Kategoria,
+
+                };
+                if (termek.TermekKep != null && termek.TermekKep.Kep != null)
+                {
+                    t.TermekKepB64 = Convert.ToBase64String(termek.TermekKep.Kep);
+                }
+                vissza.Add(t);
+            }
+            return Ok(vissza);
         }
 
         [HttpDelete("id")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace wshop3.Model;
 
@@ -17,6 +18,7 @@ public partial class Termekek
 
     public int? TermekKepId { get; set; }
 
+    [JsonIgnore]
     public virtual Kategoriak? Kategoria { get; set; }
 
     public virtual ICollection<Kosar> Kosars { get; set; } = new List<Kosar>();

@@ -28,7 +28,7 @@ namespace wshop3.Controllers
             return Ok(rendeles);
         }
 
-        [HttpGet]
+        [HttpGet("OsszesRendeles")]
         public IActionResult OsszesRendelesek()
         {
             var rendelesek = _ws3.Rendeleseks;

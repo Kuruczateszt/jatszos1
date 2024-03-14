@@ -17,7 +17,7 @@ namespace wshop3.Controllers
             _ws3 = wshop3Context;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("RendelesId/{id}")]
         public IActionResult rendelesekId([FromRoute] int id)
         {
             var rendeles = _ws3.Rendeleseks.Where(r => r.Id == id);

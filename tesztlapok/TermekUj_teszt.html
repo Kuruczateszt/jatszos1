@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>Új termék felvétele teszt</h2>
+
+    <form action="http://localhost:5130/api/Termekek" method="post" enctype="multipart/form-data">
+        <label for="Nev">Név:</label><br>
+        <input type="text" id="Nev" name="Nev"><br>
+        <label for="Ar">Ár:</label><br>
+        <input type="text" id="Ar" name="Ar"><br>
+        <label for="KategoriaId">Kategória ID:</label><br>
+        <input type="text" id="KategoriaId" name="KategoriaId"><br>
+        <input type="file" name="Kep"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+
+</html>

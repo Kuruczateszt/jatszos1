@@ -112,7 +112,7 @@ namespace wshop3.Controller
             //csak jpg lehet
             if (file.ContentType != "image/jpeg" || !Jpge(file.OpenReadStream()))
             {
-                return BadRequest("Csak jpeg fényképek tölthetőek fel lehet");
+                return BadRequest("Csak jpeg fényképek tölthetőek fel");
             }
 
             //5 MB maximum

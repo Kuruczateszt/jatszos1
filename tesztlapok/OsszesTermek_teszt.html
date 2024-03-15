@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>Összes Termék</h2>
+
+    <button onclick="ÖsszesTermek()">Termékek</button>
+
+    <table id="termekTabla">
+        <tr>
+            <th>Id</th>
+            <th>Név</th>
+            <th>Ár</th>
+            <th>Leírás</th>
+            <th>Kategória</th>
+            <th>Kép</th>
+        </tr>
+    </table>
+
+    <script>
+        function ÖsszesTermek() {
+            fetch('http://localhost:5130/api/Termekek/OsszesTermek')
+                .then(response => response.json())
+                .then(data => {
+                    const termekTabla = document.getElementById('termekTabla');
+                    // így megmarad a fejléc
+                    while (termekTabla.rows.length > 1) {
+                        termekTabla.deleteRow(1);
+                    }
+                    data.forEach(termek => {
+                        let sor = termekTabla.insertRow(-1);
+                        sor.insertCell(0).textContent = termek.id;
+                        sor.insertCell(1).textContent = termek.nev;
+                        sor.insertCell(2).textContent = termek.ar;
+                        sor.insertCell(3).textContent = termek.leiras;
+                        sor.insertCell(4).textContent = termek.kategoria.nev;
+
+                        if (termek.termekKepB64) {
+                            let kepC = sor.insertCell(5);
+                            let kep = document.createElement('img');
+                            kep.src = 'data:image/jpeg;base64,' + termek.termekKepB64;
+                            kep.height = 200;
+                            kepC.appendChild(kep);
+                        } else {
+                            sor.insertCell(5).textContent = 'Nincs kép';
+                        }
+                    });
+                });
+        }
+    </script>
+
+</body>
+
+</html>

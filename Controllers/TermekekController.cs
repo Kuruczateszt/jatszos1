@@ -94,6 +94,12 @@ namespace wshop3.Controller
                 return BadRequest("Nincs megadva kep");
             }
 
+            //csak jpg lehet
+            if (file.ContentType != "image/jpeg")
+            {
+                return BadRequest("Csak jpeg fényképek tölthetőek fel lehet");
+            }
+
             //5 MB maximum
             if (file.Length > 5242880)
             {

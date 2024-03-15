@@ -14,6 +14,21 @@ namespace wshop3.Controller
     public class TermekekController : ControllerBase
     {
         private readonly Wshop3Context _ws3;
+
+        //segéd funkció a jpg file -ok ellenőrzéséhez
+        private static bool Jpge(Stream stream)
+        {
+            byte[] buffer = new byte[4];
+            stream.Read(buffer, 0, 4);
+
+            //jpeg első 4 byte -ja ez kell legyen
+            if (buffer[0] == 0xFF && buffer[1] == 0xD8 && buffer[2] == 0xFF && buffer[3] == 0xE0)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public TermekekController(Wshop3Context whop3Context)
         {
             _ws3 = whop3Context;
@@ -95,7 +110,7 @@ namespace wshop3.Controller
             }
 
             //csak jpg lehet
-            if (file.ContentType != "image/jpeg")
+            if (file.ContentType != "image/jpeg" || !Jpge(file.OpenReadStream()))
             {
                 return BadRequest("Csak jpeg fényképek tölthetőek fel lehet");
             }

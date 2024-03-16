@@ -76,7 +76,7 @@ namespace wshop3.Controller
             return Ok(vissza);
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("TermekTorles/{id}")]
         public IActionResult TermekTorles([FromRoute] int id)
         {
             var termek = _ws3.Termekeks.FirstOrDefault(t => t.Id == id);

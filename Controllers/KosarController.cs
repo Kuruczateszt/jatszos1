@@ -18,7 +18,7 @@ namespace wshop3.Controllers
             _ws3 = whop3Context;
         }
 
-        [HttpGet("KosarId{id}")]
+        [HttpGet("KosarId/{id}")]
         public IActionResult KosarId([FromRoute] int id)
         {
             var kosar = _ws3.Kosars

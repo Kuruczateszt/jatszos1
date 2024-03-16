@@ -21,6 +21,7 @@ public partial class Termekek
     [JsonIgnore]
     public virtual Kategoriak? Kategoria { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Kosar> Kosars { get; set; } = new List<Kosar>();
 
     public virtual ICollection<Rendelesek> Rendeleseks { get; set; } = new List<Rendelesek>();

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using wshop3.Dto;
+using wshop3.DtoMap;
 using wshop3.Model;
 
 namespace wshop3.Controller
@@ -48,32 +49,13 @@ namespace wshop3.Controller
         [HttpGet("OsszesTermek")]
         public IActionResult OsszesTermek()
         {
-            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).ToList();
+            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).ToList().Select(t => t.TermekLekerdezDto());
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");
             }
 
-            var vissza = new List<TermekOsszesLekerdezDto>();
-
-            foreach (var termek in termekek)
-            {
-                var t = new TermekOsszesLekerdezDto()
-                {
-                    Id = termek.Id,
-                    Nev = termek.Nev,
-                    Ar = termek.Ar,
-                    Leiras = termek.Leiras,
-                    Kategoria = termek.Kategoria,
-
-                };
-                if (termek.TermekKep != null && termek.TermekKep.Kep != null)
-                {
-                    t.TermekKepB64 = Convert.ToBase64String(termek.TermekKep.Kep);
-                }
-                vissza.Add(t);
-            }
-            return Ok(vissza);
+            return Ok(termekek);
         }
 
         [HttpDelete("TermekTorles/{id}")]

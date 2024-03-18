@@ -86,14 +86,14 @@ namespace wshop3.Controller
 
             var termek = new Termekek
             {
-                Nev = termekAdatok["Nev"],
+                Nev = termekAdatok["Nev"]!,
                 Ar = Convert.ToDecimal(termekAdatok["Ar"]),
                 KategoriaId = Convert.ToInt32(termekAdatok["KategoriaId"])
             };
 
             var kep = new TermekKepek();
 
-            IFormFile file = termekAdatok.Files["Kep"];
+            IFormFile file = termekAdatok.Files["Kep"]!;
 
             if (file == null || file.Length == 0)
             {

@@ -75,6 +75,15 @@ namespace wshop3.Controller
         public IActionResult TermekUj([FromForm] IFormCollection termekAdatok)
         //curl -X POST "http://localhost:5130/api/Termekek" -F "Nev=Whiskyvalami11" -F "Ar=10,9" -F "KategoriaId=1" -F "Kep=@product_005.webp"
         {
+            if (termekAdatok["Nev"] == string.Empty ||
+            termekAdatok["Ar"] == string.Empty ||
+            termekAdatok["KategoriaId"] == string.Empty ||
+            //csak egy file -t lehet feltölteni a kép választó mezőben
+            termekAdatok.Files["Kep"] == null || termekAdatok.Files.Count != 1)
+            {
+                return BadRequest("Nincsenek az adatok megfelelően megadva");
+            }
+
             var termek = new Termekek
             {
                 Nev = termekAdatok["Nev"],

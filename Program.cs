@@ -1,3 +1,4 @@
+using wshop3.Datab;
 using wshop3.Model;
 
 var builder = WebApplication.CreateBuilder(args);

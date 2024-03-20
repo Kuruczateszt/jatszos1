@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using wshop3.Datab;
 using wshop3.Model;
 
 namespace wshop3.Controllers

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using wshop3.Datab;
 using wshop3.Model;
 
@@ -19,7 +20,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<Wshop3Context>();
+builder.Services.AddDbContext<Wshop3Context>(options =>
+{
+    options.UseMySql(builder.Configuration.GetConnectionString("defaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("defaultConnection")));
+});
 
 var app = builder.Build();
 

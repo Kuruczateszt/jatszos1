@@ -25,6 +25,12 @@ builder.Services.AddDbContext<Wshop3Context>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("defaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("defaultConnection")));
 });
 
+//entity -hez
+builder.Services.AddDbContext<IdentityContext>(options =>
+{
+    options.UseMySql(builder.Configuration.GetConnectionString("EntityConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("EntityConnection")));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

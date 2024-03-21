@@ -36,6 +36,9 @@ builder.Services.AddDbContext<IdentityContext>(options =>
 builder.Services.AddAuthentication()
 .AddBearerToken(IdentityConstants.BearerScheme);
 
+//??
+builder.Services.AddAuthorizationBuilder();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

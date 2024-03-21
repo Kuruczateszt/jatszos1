@@ -39,6 +39,11 @@ builder.Services.AddAuthentication()
 //??
 builder.Services.AddAuthorizationBuilder();
 
+//?? -> jav
+builder.Services.AddIdentityCore<IdentityFelhasznalo>()
+.AddEntityFrameworkStores<IdentityContext>()
+.AddApiEndpoints();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -46,6 +46,8 @@ builder.Services.AddIdentityCore<IdentityFelhasznalo>()
 
 var app = builder.Build();
 
+app.MapIdentityApi<IdentityFelhasznalo>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

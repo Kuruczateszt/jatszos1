@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using wshop3.Datab;
 using wshop3.Model;
@@ -30,6 +31,10 @@ builder.Services.AddDbContext<IdentityContext>(options =>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("EntityConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("EntityConnection")));
 });
+
+//később cserélni jwt -re.
+builder.Services.AddAuthentication()
+.AddBearerToken(IdentityConstants.BearerScheme);
 
 var app = builder.Build();
 

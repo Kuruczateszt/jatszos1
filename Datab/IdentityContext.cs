@@ -14,5 +14,10 @@ namespace wshop3.Datab
         {
 
         }
+        public DbSet<IdentityFelhasznalo> identityFelhasznalok { get; set; } = null!;
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }

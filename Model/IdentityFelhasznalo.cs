@@ -8,7 +8,7 @@ namespace wshop3.Model
 {
     public class IdentityFelhasznalo : IdentityUser
     {
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
         public int Age { get; set; }
     }
 }

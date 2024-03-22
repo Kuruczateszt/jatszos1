@@ -12,7 +12,7 @@ using wshop3.Datab;
 namespace wshop3.Migrations2
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20240321110231_identity1")]
+    [Migration("20240322112652_identity1")]
     partial class identity1
     {
         /// <inheritdoc />
@@ -165,6 +165,9 @@ namespace wshop3.Migrations2
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
@@ -175,6 +178,10 @@ namespace wshop3.Migrations2
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");

@@ -7,10 +7,10 @@ namespace wshop3.Dto
 {
     public class RegisterRequestDto
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public string Fullname { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Fullname { get; set; } = string.Empty;
         public int Age { get; set; }
     }
 }

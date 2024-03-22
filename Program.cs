@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using wshop3.Datab;
 using wshop3.Model;
+using wshop3.Service;
+using wshop3.Service.IAuth;
+using static wshop3.Service.AuthService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,21 +35,29 @@ builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("EntityConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("EntityConnection")));
 });
 
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("AuthSettings:JwtOptions"));
+
+builder.Services.AddIdentity<IdentityFelhasznalo, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+
+builder.Services.AddScoped<IAuthService, AuthService1>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+
 //később cserélni jwt -re.
-builder.Services.AddAuthentication()
-.AddBearerToken(IdentityConstants.BearerScheme);
+// builder.Services.AddAuthentication()
+// .AddBearerToken(IdentityConstants.BearerScheme);
 
 //??
-builder.Services.AddAuthorizationBuilder();
+// builder.Services.AddAuthorizationBuilder();
 
 //?? -> jav
-builder.Services.AddIdentityCore<IdentityFelhasznalo>()
-.AddEntityFrameworkStores<IdentityContext>()
-.AddApiEndpoints();
+// builder.Services.AddIdentityCore<IdentityFelhasznalo>()
+// .AddEntityFrameworkStores<IdentityContext>()
+// .AddApiEndpoints();
 
 var app = builder.Build();
 
-app.MapIdentityApi<IdentityFelhasznalo>();
+// app.MapIdentityApi<IdentityFelhasznalo>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -82,6 +93,10 @@ app.UseRouting();
 app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
+
+app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.Run();
 

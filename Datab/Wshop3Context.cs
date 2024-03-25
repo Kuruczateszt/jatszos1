@@ -21,8 +21,6 @@ public partial class Wshop3Context : DbContext
 
     public virtual DbSet<Kategoriak> Kategoriaks { get; set; }
 
-    public virtual DbSet<Kosar> Kosars { get; set; }
-
     public virtual DbSet<Rendelesek> Rendeleseks { get; set; }
 
     public virtual DbSet<TermekKepek> TermekKepeks { get; set; }
@@ -67,38 +65,6 @@ public partial class Wshop3Context : DbContext
             entity.Property(e => e.Nev)
                 .HasMaxLength(50)
                 .HasColumnName("nev");
-        });
-
-        modelBuilder.Entity<Kosar>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("kosar");
-
-            entity.HasIndex(e => e.FelhasznaloId, "felhasznalo_id");
-
-            entity.HasIndex(e => e.TermekId, "termek_id");
-
-            entity.Property(e => e.Id)
-                .HasColumnType("int(11)")
-                .HasColumnName("id");
-            entity.Property(e => e.FelhasznaloId)
-                .HasColumnType("int(11)")
-                .HasColumnName("felhasznalo_id");
-            entity.Property(e => e.Mennyiseg)
-                .HasColumnType("int(11)")
-                .HasColumnName("mennyiseg");
-            entity.Property(e => e.TermekId)
-                .HasColumnType("int(11)")
-                .HasColumnName("termek_id");
-
-            entity.HasOne(d => d.Felhasznalo).WithMany(p => p.Kosars)
-                .HasForeignKey(d => d.FelhasznaloId)
-                .HasConstraintName("kosar_ibfk_1");
-
-            entity.HasOne(d => d.Termek).WithMany(p => p.Kosars)
-                .HasForeignKey(d => d.TermekId)
-                .HasConstraintName("kosar_ibfk_2");
         });
 
         modelBuilder.Entity<Rendelesek>(entity =>

@@ -97,6 +97,32 @@ public partial class Wshop3Context : DbContext
             entity.HasOne(d => d.Termek).WithMany(p => p.Rendeleseks)
                 .HasForeignKey(d => d.TermekId)
                 .HasConstraintName("rendelesek_ibfk_2");
+
+            entity.HasMany(d => d.Termeks).WithMany(p => p.Rendeles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RendelesTermek",
+                    r => r.HasOne<Termekek>().WithMany()
+                        .HasForeignKey("TermekId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("rendeles_termek_ibfk_2"),
+                    l => l.HasOne<Rendelesek>().WithMany()
+                        .HasForeignKey("RendelesId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("rendeles_termek_ibfk_1"),
+                    j =>
+                    {
+                        j.HasKey("RendelesId", "TermekId")
+                            .HasName("PRIMARY")
+                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                        j.ToTable("rendeles_termek");
+                        j.HasIndex(new[] { "TermekId" }, "termek_id");
+                        j.IndexerProperty<int>("RendelesId")
+                            .HasColumnType("int(11)")
+                            .HasColumnName("rendeles_id");
+                        j.IndexerProperty<int>("TermekId")
+                            .HasColumnType("int(11)")
+                            .HasColumnName("termek_id");
+                    });
         });
 
         modelBuilder.Entity<TermekKepek>(entity =>

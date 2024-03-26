@@ -24,4 +24,6 @@ public partial class Termekek
     public virtual ICollection<Rendelesek> Rendeleseks { get; set; } = new List<Rendelesek>();
 
     public virtual TermekKepek? TermekKep { get; set; }
+
+    public virtual ICollection<Rendelesek> Rendeles { get; set; } = new List<Rendelesek>();
 }

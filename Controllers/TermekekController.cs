@@ -89,6 +89,8 @@ namespace wshop3.Controller
             {
                 Nev = termekAdatok["Nev"]!,
                 Ar = Convert.ToDecimal(termekAdatok["Ar"]),
+                //termék leírás nem kötelező
+                Leiras = termekAdatok["Leiras"]!,
                 KategoriaId = Convert.ToInt32(termekAdatok["KategoriaId"])
             };
 

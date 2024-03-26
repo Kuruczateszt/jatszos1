@@ -139,8 +139,6 @@ namespace wshop3.Controller
                     return StatusCode(500, "Szerver hiba");
                 }
             }
-
-
         }
     }
 }

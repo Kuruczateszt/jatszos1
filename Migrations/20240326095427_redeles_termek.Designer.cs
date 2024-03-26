@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using wshop3.Datab;
 
@@ -11,9 +12,11 @@ using wshop3.Datab;
 namespace wshop3.Migrations
 {
     [DbContext(typeof(Wshop3Context))]
-    partial class Wshop3ContextModelSnapshot : ModelSnapshot
+    [Migration("20240326095427_redeles_termek")]
+    partial class redeles_termek
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -75,7 +75,7 @@ public partial class Wshop3Context : DbContext
 
             entity.HasIndex(e => e.FelhasznaloId, "felhasznalo_id");
 
-            entity.HasIndex(e => e.TermekId, "termek_id");
+            entity.HasIndex(e => e.TermekId, "termek_id1");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
@@ -86,6 +86,9 @@ public partial class Wshop3Context : DbContext
             entity.Property(e => e.Mennyiseg)
                 .HasColumnType("int(11)")
                 .HasColumnName("mennyiseg");
+            entity.Property(e => e.RendelesIdeje)
+                .HasColumnType("timestamp")
+                .HasColumnName("rendeles_ideje");
             entity.Property(e => e.TermekId)
                 .HasColumnType("int(11)")
                 .HasColumnName("termek_id");
@@ -131,7 +134,7 @@ public partial class Wshop3Context : DbContext
 
             entity.ToTable("termek_kepek");
 
-            entity.HasIndex(e => e.TermekId, "termek_id");
+            entity.HasIndex(e => e.TermekId, "termek_id2");
 
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")

@@ -13,6 +13,8 @@ public partial class Rendelesek
 
     public int? Mennyiseg { get; set; }
 
+    public DateTime? RendelesIdeje { get; set; }
+
     public virtual Felhasznalok? Felhasznalo { get; set; }
 
     public virtual Termekek? Termek { get; set; }

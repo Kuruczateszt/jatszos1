@@ -121,13 +121,26 @@ namespace wshop3.Controller
                 kep.Kep = memoryStream.ToArray();
             }
 
-            _ws3.TermekKepeks.Add(kep);
-            _ws3.SaveChanges();
+            using (var t = _ws3.Database.BeginTransaction())
+            {
+                try
+                {
+                    _ws3.TermekKepeks.Add(kep);
+                    _ws3.SaveChanges();
+                    termek.TermekKepId = kep.Id;
+                    _ws3.Termekeks.Add(termek);
+                    _ws3.SaveChanges();
+                    t.Commit();
+                    return Ok("termék rögzívte");
+                }
+                catch (Exception)
+                {
+                    t.Rollback();
+                    return StatusCode(500, "Szerver hiba");
+                }
+            }
 
-            termek.TermekKepId = kep.Id;
-            _ws3.Termekeks.Add(termek);
-            _ws3.SaveChanges();
-            return Ok("termék rögzívte");
+
         }
     }
 }

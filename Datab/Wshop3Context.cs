@@ -93,10 +93,6 @@ public partial class Wshop3Context : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("termek_id");
 
-            entity.HasOne(d => d.Felhasznalo).WithMany(p => p.Rendeleseks)
-                .HasForeignKey(d => d.FelhasznaloId)
-                .HasConstraintName("rendelesek_ibfk_1");
-
             entity.HasOne(d => d.Termek).WithMany(p => p.Rendeleseks)
                 .HasForeignKey(d => d.TermekId)
                 .HasConstraintName("rendelesek_ibfk_2");

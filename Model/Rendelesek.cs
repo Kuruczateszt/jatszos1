@@ -15,8 +15,6 @@ public partial class Rendelesek
 
     public DateTime? RendelesIdeje { get; set; }
 
-    public virtual Felhasznalok? Felhasznalo { get; set; }
-
     public virtual Termekek? Termek { get; set; }
 
     public virtual ICollection<Termekek> Termeks { get; set; } = new List<Termekek>();

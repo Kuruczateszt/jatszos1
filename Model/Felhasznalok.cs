@@ -12,6 +12,4 @@ public partial class Felhasznalok
     public string Jelszo { get; set; } = null!;
 
     public string Email { get; set; } = null!;
-
-    public virtual ICollection<Rendelesek> Rendeleseks { get; set; } = new List<Rendelesek>();
 }

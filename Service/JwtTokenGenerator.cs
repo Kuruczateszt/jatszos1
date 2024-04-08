@@ -31,8 +31,13 @@ namespace wshop3.Service
             {
 
                 new Claim(JwtRegisteredClaimNames.Sub,identityFelhasznalo.Id),
-                new Claim(JwtRegisteredClaimNames.Name,identityFelhasznalo.UserName.ToString()),
-                new Claim(JwtRegisteredClaimNames.Name,identityFelhasznalo.FullName.ToString())
+                //null
+                new Claim(JwtRegisteredClaimNames.Name,identityFelhasznalo.UserName == null ? "" : identityFelhasznalo.UserName.ToString()),
+                new Claim(JwtRegisteredClaimNames.Name,identityFelhasznalo.TeljesNev.ToString()),
+                new Claim("Iranyitoszam", identityFelhasznalo.Iranyitoszam.ToString()),
+                new Claim("Varos", identityFelhasznalo.Varos),
+                new Claim("Utca", identityFelhasznalo.Utca),
+                new Claim("Hazszam", identityFelhasznalo.Hazszam.ToString())
             };
 
             claimList.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

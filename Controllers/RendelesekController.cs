@@ -20,7 +20,7 @@ namespace wshop3.Controllers
 
     public class RendelesekJson
     {
-        public string FelhasznaloId { get; set; }
+        public string FelhasznaloId { get; set; } = string.Empty;
         public List<TermekJson> Termekek { get; set; } = new List<TermekJson>();
     }
 

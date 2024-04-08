@@ -7,7 +7,7 @@ namespace wshop3.Dto
 {
     public class RoleDto
     {
-        public string Role { get; set; }
-        public string Email { get; set; }
+        public string Role { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 }

@@ -55,7 +55,7 @@ namespace wshop3.Service
                 var user = await dbcontext.identityFelhasznalok.
                     FirstOrDefaultAsync(user => user.UserName != null && user.UserName.ToLower() == loginRequestDto.UserName.ToLower());
 
-                bool isValid = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+                bool isValid = await userManager.CheckPasswordAsync(user != null ? user : new IdentityFelhasznalo(), loginRequestDto.Password);
 
                 if (user == null || isValid == false)
                 {

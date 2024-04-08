@@ -53,7 +53,7 @@ namespace wshop3.Service
             public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
             {
                 var user = await dbcontext.identityFelhasznalok.
-                    FirstOrDefaultAsync(user => user.UserName.ToLower() == loginRequestDto.UserName.ToLower());
+                    FirstOrDefaultAsync(user => user.UserName != null && user.UserName.ToLower() == loginRequestDto.UserName.ToLower());
 
                 bool isValid = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 

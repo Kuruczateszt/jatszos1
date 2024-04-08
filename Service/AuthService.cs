@@ -31,7 +31,7 @@ namespace wshop3.Service
 
             public async Task<bool> AssignRole(string email, string roleName)
             {
-                var user = dbcontext.identityFelhasznalok.FirstOrDefault(user => user.Email.ToLower() == email.ToLower());
+                var user = dbcontext.identityFelhasznalok.FirstOrDefault(user => user.Email != null && user.Email.ToLower() == email.ToLower());
 
                 if (user != null)
                 {

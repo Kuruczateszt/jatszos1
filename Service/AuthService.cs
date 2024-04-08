@@ -112,7 +112,7 @@ namespace wshop3.Service
                     }
                     else
                     {
-                        return result.Errors.FirstOrDefault().Description;
+                        return result.Errors.FirstOrDefault()?.Description ?? "";
                     }
 
 

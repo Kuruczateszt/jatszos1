@@ -81,8 +81,8 @@ public partial class Wshop3Context : DbContext
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.FelhasznaloId)
-                .HasColumnType("int(11)")
-                .HasColumnName("felhasznalo_id");
+                .HasColumnName("felhasznalo_id")
+                .UseCollation("utf8mb4_general_ci");
             entity.Property(e => e.Mennyiseg)
                 .HasColumnType("int(11)")
                 .HasColumnName("mennyiseg");

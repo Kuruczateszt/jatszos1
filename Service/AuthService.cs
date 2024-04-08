@@ -82,8 +82,11 @@ namespace wshop3.Service
                     UserName = registerRequestDto.UserName,
                     NormalizedUserName = registerRequestDto.UserName.ToUpper(),
                     Email = registerRequestDto.Email,
-                    FullName = registerRequestDto.Fullname,
-                    Age = registerRequestDto.Age,
+                    TeljesNev = registerRequestDto.TeljesNev,
+                    Iranyitoszam = registerRequestDto.Iranyitoszam,
+                    Varos = registerRequestDto.Varos,
+                    Utca = registerRequestDto.Utca,
+                    Hazszam = registerRequestDto.Hazszam
                 };
 
                 try
@@ -98,7 +101,11 @@ namespace wshop3.Service
                         {
                             UserName = userToReturn.UserName,
                             Email = userToReturn.Email,
-                            Fullname = userToReturn.FullName
+                            TeljesNev = userToReturn.TeljesNev,
+                            Iranyitoszam = userToReturn.Iranyitoszam,
+                            Varos = userToReturn.Varos,
+                            Utca = userToReturn.Utca,
+                            Hazszam = userToReturn.Hazszam
                         };
 
                         return "";
@@ -115,8 +122,6 @@ namespace wshop3.Service
 
                     throw;
                 }
-
-
             }
         }
     }

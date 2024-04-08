@@ -63,7 +63,7 @@ namespace wshop3.Controller
         public IActionResult OsszesTermek([FromRoute] string keres)
         {
             var termekek = _ws3.Termekeks
-            .Where(t => t.Nev.Contains(keres) || t.Leiras.Contains(keres))
+            .Where(t => t.Nev.Contains(keres) || (t.Leiras != null && t.Leiras.Contains(keres)))
             .Include(t => t.Kategoria)
             .Include(t => t.TermekKep)
             .ToList().Select(t => t.TermekLekerdezDto());

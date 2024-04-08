@@ -59,6 +59,21 @@ namespace wshop3.Controller
             return Ok(termekek);
         }
 
+        [HttpGet("Termek/{keres}")]
+        public IActionResult OsszesTermek([FromRoute] string keres)
+        {
+            var termekek = _ws3.Termekeks
+            .Where(t => t.Nev.Contains(keres) || t.Leiras.Contains(keres))
+            .Include(t => t.Kategoria)
+            .Include(t => t.TermekKep)
+            .ToList().Select(t => t.TermekLekerdezDto());
+            if (termekek.Count() == 0)
+            {
+                return BadRequest("Nincsenek termekek");
+            }
+            return Ok(termekek);
+        }
+
         [HttpDelete("TermekTorles/{id}")]
         public IActionResult TermekTorles([FromRoute] int id)
         {

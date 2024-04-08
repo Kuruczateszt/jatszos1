@@ -10,7 +10,10 @@ namespace wshop3.Dto
         public string UserName { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Fullname { get; set; } = string.Empty;
-        public int Age { get; set; }
+        public string TeljesNev { get; set; } = string.Empty;
+        public int Iranyitoszam { get; set; }
+        public string Varos { get; set; } = string.Empty;
+        public string Utca { get; set; } = string.Empty;
+        public int Hazszam { get; set; }
     }
 }

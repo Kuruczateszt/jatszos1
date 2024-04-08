@@ -100,7 +100,7 @@ namespace wshop3.Service
                         RegisterResponseDto registerResponseDto = new()
                         {
                             UserName = userToReturn.UserName != null ? userToReturn.UserName : "",
-                            Email = userToReturn.Email,
+                            Email = userToReturn.Email != null ? userToReturn.Email : "",
                             TeljesNev = userToReturn.TeljesNev,
                             Iranyitoszam = userToReturn.Iranyitoszam,
                             Varos = userToReturn.Varos,

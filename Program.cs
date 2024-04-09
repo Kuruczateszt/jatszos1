@@ -94,9 +94,9 @@ app.UseCors("AllowAllOrigins");
 
 app.MapControllers();
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.Run();
 

@@ -95,6 +95,8 @@ namespace wshop3.Service
 
                     if (result.Succeeded)
                     {
+                        await userManager.AddToRoleAsync(user, "USER");
+
                         var userToReturn = dbcontext.identityFelhasznalok.First(user => user.UserName == registerRequestDto.UserName);
 
                         RegisterResponseDto registerResponseDto = new()

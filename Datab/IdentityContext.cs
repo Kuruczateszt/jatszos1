@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using wshop3.Model;
@@ -15,9 +16,15 @@ namespace wshop3.Datab
 
         }
         public DbSet<IdentityFelhasznalo> identityFelhasznalok { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<IdentityRole>().HasData(
+                new IdentityRole { Name = "ADMIN", NormalizedName = "ADMIN" },
+                new IdentityRole { Name = "ADMIN", NormalizedName = "USER" }
+            );
         }
     }
 }

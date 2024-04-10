@@ -37,8 +37,8 @@ namespace wshop3.Service
                 {
                     if (!roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
                     {
-                        //Itt készülnek a Role-ok
-                        roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+                        //roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+                        return false;
                     }
 
                     await userManager.AddToRoleAsync(user, roleName);

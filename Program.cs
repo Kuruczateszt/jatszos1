@@ -1,5 +1,8 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using wshop3.Datab;
 using wshop3.Model;
@@ -9,20 +12,39 @@ using static wshop3.Service.AuthService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
+// curl - X 'POST'   'http://localhost:5130/auth/login' - H 'accept: */*' - H 'Content-Type: application/json' - d '{
+//   "userName": "teszt",
+//   "password": "Teszt@1234"
+// }'
+
+var settingsSection = builder.Configuration.GetSection("AuthSettings:JwtOptions");
+
+var secret = settingsSection.GetValue<string>("Secret");
+var issuer = settingsSection.GetValue<string>("Issuer");
+var audience = settingsSection.GetValue<string>("Audience");
+
+var key = Encoding.ASCII.GetBytes(secret);
+
+builder.Services.AddAuthentication(x =>
 {
-    options.AddPolicy("AllowAllOrigins", policy =>
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
     {
-        policy.AllowAnyOrigin()
-             .AllowAnyMethod()
-             .AllowAnyHeader();
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidIssuer = issuer,
+        ValidAudience = audience,
+        ValidateAudience = true
+    };
 });
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAuthorization();
+
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
@@ -53,6 +75,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()
+             .AllowAnyMethod()
+             .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddDbContext<Wshop3Context>(options =>
 {
     options.UseMySql(builder.Configuration.GetConnectionString("defaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("defaultConnection")));
@@ -64,6 +97,10 @@ builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("EntityConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("EntityConnection")));
 });
 
+builder.Services.AddEndpointsApiExplorer();
+
+//-------------------------------
+
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("AuthSettings:JwtOptions"));
 
 builder.Services.AddIdentity<IdentityFelhasznalo, IdentityRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
@@ -71,22 +108,12 @@ builder.Services.AddIdentity<IdentityFelhasznalo, IdentityRole>().AddEntityFrame
 builder.Services.AddScoped<IAuthService, AuthService1>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
+builder.Services.AddControllers();
 
-//később cserélni jwt -re.
-// builder.Services.AddAuthentication()
-// .AddBearerToken(IdentityConstants.BearerScheme);
+//-------------------------------
 
-//??
-// builder.Services.AddAuthorizationBuilder();
-
-//?? -> jav
-// builder.Services.AddIdentityCore<IdentityFelhasznalo>()
-// .AddEntityFrameworkStores<IdentityContext>()
-// .AddApiEndpoints();
 
 var app = builder.Build();
-
-// app.MapIdentityApi<IdentityFelhasznalo>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -97,39 +124,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
 app.UseRouting();
 
 app.UseCors("AllowAllOrigins");
-
-app.MapControllers();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.Run();
+app.MapControllers();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+app.Run();

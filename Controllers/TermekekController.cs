@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using wshop3.Datab;
@@ -36,6 +37,7 @@ namespace wshop3.Controller
             _ws3 = whop3Context;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
         public IActionResult TermekekId([FromRoute] int id)
         {
@@ -47,6 +49,7 @@ namespace wshop3.Controller
             return Ok(termek);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("OsszesTermek")]
         public IActionResult OsszesTermek()
         {
@@ -59,6 +62,7 @@ namespace wshop3.Controller
             return Ok(termekek);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("Termek/{keres}")]
         public IActionResult OsszesTermek([FromRoute] string keres)
         {

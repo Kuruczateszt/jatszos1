@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wshop3.Datab;
 using wshop3.Dto;
@@ -37,6 +38,7 @@ namespace wshop3.Controllers
             _identity = IdentityContext;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpGet("RendelesId/{id}")]
         public IActionResult rendelesekId([FromRoute] int id)
         {
@@ -48,6 +50,7 @@ namespace wshop3.Controllers
             return Ok(rendeles);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpGet("OsszesRendeles")]
         public IActionResult OsszesRendelesek()
         {

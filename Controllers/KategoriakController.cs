@@ -41,7 +41,7 @@ namespace wshop3.Controllers
             return Ok(kategoriak);
         }
 
-        [HttpPut("kategoriaUJ")]
+        [HttpPost("kategoriaUJ")]
         public IActionResult kategoriaUj([FromBody] KategoriakDto kategoriaDto)
         {
             if (kategoriaDto.Nev == string.Empty)

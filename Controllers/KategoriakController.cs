@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wshop3.Datab;
 using wshop3.Dto;
@@ -19,6 +20,7 @@ namespace wshop3.Controllers
             _ws3 = whop3Context;
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("KategoriaId/{id}")]
         public IActionResult KategoriaId([FromRoute] int id)
         {
@@ -30,6 +32,7 @@ namespace wshop3.Controllers
             return Ok(kategoria);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("OsszesKategoria")]
         public IActionResult OsszesKategoria()
         {

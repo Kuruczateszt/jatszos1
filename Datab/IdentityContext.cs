@@ -23,7 +23,7 @@ namespace wshop3.Datab
 
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole { Name = "ADMIN", NormalizedName = "ADMIN" },
-                new IdentityRole { Name = "ADMIN", NormalizedName = "USER" }
+                new IdentityRole { Name = "USER", NormalizedName = "USER" }
             );
         }
     }

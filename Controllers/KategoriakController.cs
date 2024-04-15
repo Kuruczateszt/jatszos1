@@ -44,6 +44,7 @@ namespace wshop3.Controllers
             return Ok(kategoriak);
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("kategoriaUJ")]
         public IActionResult kategoriaUj([FromBody] KategoriakDto kategoriaDto)
         {

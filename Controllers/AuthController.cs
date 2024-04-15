@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using wshop3.Dto;
 using wshop3.Service.IAuth;
@@ -31,7 +32,7 @@ namespace wshop3.Controllers
             return StatusCode(201, "Sikeres regisztráció");
         }
 
-
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("AssignRole")]
         public async Task<ActionResult> AssignRole([FromBody] RoleDto model)
         {

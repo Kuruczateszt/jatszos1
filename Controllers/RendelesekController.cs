@@ -65,6 +65,7 @@ namespace wshop3.Controllers
 
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("RendelesekUj")]
         public IActionResult RendelesekUjPost([FromBody] RendelesekJson adatok)
         {

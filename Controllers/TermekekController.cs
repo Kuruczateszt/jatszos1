@@ -18,6 +18,7 @@ namespace wshop3.Controller
     public class TermekekController : ControllerBase
     {
         private readonly Wshop3Context _ws3;
+        private readonly ITermekekRepo _repo;
 
         //segéd funkció a jpg file -ok ellenőrzéséhez
         private static bool Jpge(Stream stream)
@@ -33,20 +34,23 @@ namespace wshop3.Controller
 
             return false;
         }
-        public TermekekController(Wshop3Context whop3Context)
+        public TermekekController(Wshop3Context whop3Context, ITermekekRepo repo)
         {
             _ws3 = whop3Context;
+            _repo = repo;
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
-        public IActionResult TermekekId([FromRoute] int id)
+        public async Task<IActionResult> TermekekId([FromRoute] int id)
         {
-            var termek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).FirstOrDefault(t => t.Id == id);
+            var termek = await _repo.TermekekIdAsync(id);
+
             if (termek == null)
             {
                 return BadRequest("Nincs ilyen termek");
             }
+
             return Ok(termek);
         }
 

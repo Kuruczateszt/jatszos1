@@ -54,7 +54,10 @@ namespace wshop3.Controller
         [HttpGet("OsszesTermek")]
         public IActionResult OsszesTermek([FromQuery] Szures szur)
         {
-            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).ToList().Select(t => t.TermekLekerdezDto()).AsQueryable();
+            var termekek = _ws3.Termekeks
+                .Include(t => t.Kategoria)
+                .Include(t => t.TermekKep)
+                .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(szur.Keres))
             {
@@ -83,12 +86,14 @@ namespace wshop3.Controller
             var kihagy = (szur.Lapszam - 1) * szur.Lapmeret;
             termekek = termekek.Skip(kihagy).Take(szur.Lapmeret);
 
-            if (termekek.Count() == 0)
+            var termekekvissza = termekek.Select(t => t.TermekLekerdezDto()).ToList();
+
+            if (termekekvissza.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");
             }
 
-            return Ok(termekek);
+            return Ok(termekekvissza);
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]

@@ -71,16 +71,14 @@ namespace wshop3.Controller
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpDelete("TermekTorles/{id}")]
-        public IActionResult TermekTorles([FromRoute] int id)
+        public async Task<IActionResult> TermekTorles([FromRoute] int id)
         {
-            var termek = _ws3.Termekeks.FirstOrDefault(t => t.Id == id);
+            var termek = await _repo.TermekTorlesAsync(id);
             if (termek == null)
             {
                 return BadRequest("Nincs ilyen termek");
             }
-            _ws3.Termekeks.Remove(termek);
-            _ws3.SaveChanges();
-            return Ok();
+            return Ok($"A {termek.Nev} sikeresen törölve");
         }
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]

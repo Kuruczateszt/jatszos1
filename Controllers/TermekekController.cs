@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using wshop3.Datab;
 using wshop3.Dto;
 using wshop3.DtoMap;
+using wshop3.filt;
 using wshop3.Model;
 
 namespace wshop3.Controller
@@ -51,9 +52,15 @@ namespace wshop3.Controller
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("OsszesTermek")]
-        public IActionResult OsszesTermek()
+        public IActionResult OsszesTermek([FromQuery] Szures szur)
         {
-            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).ToList().Select(t => t.TermekLekerdezDto());
+            var termekek = _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).ToList().Select(t => t.TermekLekerdezDto()).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(szur.Keres))
+            {
+                termekek = termekek.Where(t => t.Nev.Contains(szur.Keres) || (t.Leiras != null && t.Leiras.Contains(szur.Keres)));
+            }
+
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");

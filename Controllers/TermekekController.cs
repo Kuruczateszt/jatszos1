@@ -61,6 +61,24 @@ namespace wshop3.Controller
                 termekek = termekek.Where(t => t.Nev.Contains(szur.Keres) || (t.Leiras != null && t.Leiras.Contains(szur.Keres)));
             }
 
+            if (!string.IsNullOrWhiteSpace(szur.Rendez))
+            {
+                //hibásan megadott érték esetén nincs rendezés
+                switch (szur.Rendez.ToLower())
+                {
+                    case "nev":
+                        termekek = szur.CsokkenoSorrend ?
+                        termekek.OrderByDescending(t => t.Nev) : termekek.OrderBy(t => t.Nev);
+                        break;
+                    case "ar":
+                        termekek = szur.CsokkenoSorrend ?
+                        termekek.OrderByDescending(t => t.Ar) : termekek.OrderBy(t => t.Ar);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");

@@ -64,5 +64,20 @@ namespace wshop3.Datab.repo
 
             return termekekvissza;
         }
+
+        public async Task<Termekek?> TermekTorlesAsync(int id)
+        {
+            var termek = await _ws3.Termekeks.FirstOrDefaultAsync(t => t.Id == id);
+
+            if (termek == null)
+            {
+                return null;
+            }
+
+            _ws3.Termekeks.Remove(termek);
+            await _ws3.SaveChangesAsync();
+
+            return termek;
+        }
     }
 }

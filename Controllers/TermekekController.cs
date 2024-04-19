@@ -51,8 +51,8 @@ namespace wshop3.Controller
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
-        [HttpGet("OsszesTermek")]
-        public IActionResult OsszesTermek([FromQuery] Szures szur)
+        [HttpGet("TermekLista")]
+        public IActionResult TermekLista([FromQuery] Szures szur)
         {
             var termekek = _ws3.Termekeks
                 .Include(t => t.Kategoria)

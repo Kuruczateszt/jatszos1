@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using wshop3.Datab;
+using wshop3.Datab.repo;
 using wshop3.Model;
 using wshop3.Service;
 using wshop3.Service.IAuth;
@@ -97,6 +98,8 @@ builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("EntityConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("EntityConnection")));
 });
 
+builder.Services.AddScoped<ITermekekRepo, TermekekRepo>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 //-------------------------------
@@ -107,6 +110,8 @@ builder.Services.AddIdentity<IdentityFelhasznalo, IdentityRole>().AddEntityFrame
 
 builder.Services.AddScoped<IAuthService, AuthService1>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+
 
 builder.Services.AddControllers();
 

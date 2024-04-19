@@ -56,41 +56,10 @@ namespace wshop3.Controller
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("TermekLista")]
-        public IActionResult TermekLista([FromQuery] Szures szur)
+        public async Task<IActionResult> TermekLista([FromQuery] Szures szur)
         {
-            var termekek = _ws3.Termekeks
-                .Include(t => t.Kategoria)
-                .Include(t => t.TermekKep)
-                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(szur.Keres))
-            {
-                termekek = termekek.Where(t => t.Nev.Contains(szur.Keres) || (t.Leiras != null && t.Leiras.Contains(szur.Keres)));
-            }
-
-            if (!string.IsNullOrWhiteSpace(szur.Rendez))
-            {
-                //hibásan megadott érték esetén nincs rendezés
-                switch (szur.Rendez.ToLower())
-                {
-                    case "nev":
-                        termekek = szur.CsokkenoSorrend ?
-                        termekek.OrderByDescending(t => t.Nev) : termekek.OrderBy(t => t.Nev);
-                        break;
-                    case "ar":
-                        termekek = szur.CsokkenoSorrend ?
-                        termekek.OrderByDescending(t => t.Ar) : termekek.OrderBy(t => t.Ar);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            //első oldalon nincs mit kihagyni, ezért a -1
-            var kihagy = (szur.Lapszam - 1) * szur.Lapmeret;
-            termekek = termekek.Skip(kihagy).Take(szur.Lapmeret);
-
-            var termekekvissza = termekek.Select(t => t.TermekLekerdezDto()).ToList();
+            var termekekvissza = await _repo.TermekListAsync(szur);
 
             if (termekekvissza.Count() == 0)
             {

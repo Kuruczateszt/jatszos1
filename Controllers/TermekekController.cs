@@ -79,6 +79,10 @@ namespace wshop3.Controller
                 }
             }
 
+            //első oldalon nincs mit kihagyni, ezért a -1
+            var kihagy = (szur.Lapszam - 1) * szur.Lapmeret;
+            termekek = termekek.Skip(kihagy).Take(szur.Lapmeret);
+
             if (termekek.Count() == 0)
             {
                 return BadRequest("Nincsenek termekek");

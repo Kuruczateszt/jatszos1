@@ -32,10 +32,12 @@ namespace wshop3.Controllers
     {
         private readonly Wshop3Context _ws3;
         private readonly IdentityContext _identity;
-        public RendelesekController(Wshop3Context wshop3Context, IdentityContext IdentityContext)
+        private readonly IRendelesekRepo _repo;
+        public RendelesekController(Wshop3Context wshop3Context, IdentityContext IdentityContext, IRendelesekRepo repo)
         {
             _ws3 = wshop3Context;
             _identity = IdentityContext;
+            _repo = repo;
         }
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]

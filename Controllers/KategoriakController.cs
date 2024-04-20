@@ -61,7 +61,7 @@ namespace wshop3.Controllers
             try
             {
                 kategoria = await _repo.KategoriaUjAsync(kategoria);
-                return Ok($"kategoria felvétele sikeres: {kategoria}");
+                return Ok($"kategoria felvétele sikeres: {kategoria.Nev}");
             }
             catch (Exception e)
             {

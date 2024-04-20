@@ -129,18 +129,15 @@ namespace wshop3.Controller
                 kep.Kep = memoryStream.ToArray();
             }
 
-            Termekek t;
-
             try
             {
-                t = await _repo.TermekUjAsync(termek, kep);
+                termek = await _repo.TermekUjAsync(termek, kep);
+                return Ok($"termek felvétele sikeres: {termek.Nev}");
             }
             catch (Exception e)
             {
                 return StatusCode(500, $"Szerver hiba {e.Message}");
             }
-
-            return Ok($"termek felvétele sikeres: {t.Nev}");
         }
     }
 }

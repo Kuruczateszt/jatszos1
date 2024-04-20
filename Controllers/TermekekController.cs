@@ -83,7 +83,7 @@ namespace wshop3.Controller
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("TermekUj")]
-        public IActionResult TermekUj([FromForm] IFormCollection termekAdatok)
+        public async Task<IActionResult> TermekUj([FromForm] IFormCollection termekAdatok)
         //curl -X POST "http://localhost:5130/api/Termekek" -F "Nev=Whiskyvalami11" -F "Ar=10,9" -F "KategoriaId=1" -F "Kep=@product_005.webp"
         {
             if (termekAdatok["Nev"] == string.Empty ||
@@ -104,8 +104,6 @@ namespace wshop3.Controller
                 KategoriaId = Convert.ToInt32(termekAdatok["KategoriaId"])
             };
 
-            var kep = new TermekKepek();
-
             IFormFile file = termekAdatok.Files["Kep"]!;
 
             if (file == null || file.Length == 0)
@@ -125,30 +123,26 @@ namespace wshop3.Controller
                 return BadRequest("File mérete nem lehet nagyobb mint 5mb");
             }
 
+            var kep = new TermekKepek();
+
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 file.CopyTo(memoryStream);
                 kep.Kep = memoryStream.ToArray();
             }
 
-            using (var t = _ws3.Database.BeginTransaction())
+            Termekek t;
+
+            try
             {
-                try
-                {
-                    _ws3.TermekKepeks.Add(kep);
-                    _ws3.SaveChanges();
-                    termek.TermekKepId = kep.Id;
-                    _ws3.Termekeks.Add(termek);
-                    _ws3.SaveChanges();
-                    t.Commit();
-                    return Ok("termék rögzívte");
-                }
-                catch (Exception)
-                {
-                    t.Rollback();
-                    return StatusCode(500, "Szerver hiba");
-                }
+                t = await _repo.TermekUjAsync(termek, kep);
             }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Szerver hiba {e.Message}");
+            }
+
+            return Ok($"termek felvétele sikeres: {t.Nev}");
         }
     }
 }

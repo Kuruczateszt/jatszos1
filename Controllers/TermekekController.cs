@@ -17,7 +17,6 @@ namespace wshop3.Controller
     [Route("api/[controller]")]
     public class TermekekController : ControllerBase
     {
-        private readonly Wshop3Context _ws3;
         private readonly ITermekekRepo _repo;
 
         //segéd funkció a jpg file -ok ellenőrzéséhez
@@ -34,9 +33,8 @@ namespace wshop3.Controller
 
             return false;
         }
-        public TermekekController(Wshop3Context whop3Context, ITermekekRepo repo)
+        public TermekekController(ITermekekRepo repo)
         {
-            _ws3 = whop3Context;
             _repo = repo;
         }
 

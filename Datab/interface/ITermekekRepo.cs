@@ -13,5 +13,6 @@ namespace wshop3.Datab
         Task<Termekek?> TermekekIdAsync(int id);
         Task<List<TermekOsszesLekerdezDto>> TermekListAsync(Szures szur);
         Task<Termekek?> TermekTorlesAsync(int id);
+        Task<Termekek> TermekUjAsync(Termekek termek, TermekKepek kep);
     }
 }

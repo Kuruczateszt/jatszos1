@@ -9,5 +9,6 @@ namespace wshop3.Datab
     public interface IKategoriakRepo
     {
         Task<Kategoriak?> TermekekIdAsync(int id);
+        Task<List<Kategoriak>> OsszesKategoriaAsync();
     }
 }

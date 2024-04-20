@@ -36,9 +36,9 @@ namespace wshop3.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("OsszesKategoria")]
-        public IActionResult OsszesKategoria()
+        public async Task<IActionResult> OsszesKategoria()
         {
-            var kategoriak = _ws3.Kategoriaks;
+            var kategoriak = await _repo.OsszesKategoriaAsync();
             if (kategoriak.Count() == 0)
             {
                 return BadRequest("Nincsenek kategóriak");

@@ -20,5 +20,12 @@ namespace wshop3.Datab.repo
 
             return kategoria;
         }
+
+        public async Task<List<Kategoriak>> OsszesKategoriaAsync()
+        {
+            var kategoriak = await _ws3.Kategoriaks.ToListAsync();
+
+            return kategoriak;
+        }
     }
 }

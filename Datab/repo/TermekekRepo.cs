@@ -79,5 +79,27 @@ namespace wshop3.Datab.repo
 
             return termek;
         }
+
+        public async Task<Termekek> TermekUjAsync(Termekek termek, TermekKepek kep)
+        {
+            using (var t = await _ws3.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    await _ws3.TermekKepeks.AddAsync(kep);
+                    await _ws3.SaveChangesAsync();
+                    termek.TermekKepId = kep.Id;
+                    await _ws3.Termekeks.AddAsync(termek);
+                    await _ws3.SaveChangesAsync();
+                    await t.CommitAsync();
+                    return termek;
+                }
+                catch (Exception e)
+                {
+                    await t.RollbackAsync();
+                    throw new Exception(e.Message);
+                }
+            }
+        }
     }
 }

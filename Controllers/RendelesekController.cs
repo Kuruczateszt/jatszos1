@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using wshop3.Datab;
 using wshop3.Dto;
 using wshop3.Migrations2;
@@ -30,21 +31,21 @@ namespace wshop3.Controllers
     [Route("api/[controller]")]
     public class RendelesekController : ControllerBase
     {
-        private readonly Wshop3Context _ws3;
         private readonly IdentityContext _identity;
-        private readonly IRendelesekRepo _repo;
-        public RendelesekController(Wshop3Context wshop3Context, IdentityContext IdentityContext, IRendelesekRepo repo)
+        private readonly IRendelesekRepo _rendelesek_repo;
+        private readonly ITermekekRepo _termekek_repo;
+        public RendelesekController(IdentityContext IdentityContext, IRendelesekRepo rendelesek_repo, ITermekekRepo termekek_repo)
         {
-            _ws3 = wshop3Context;
             _identity = IdentityContext;
-            _repo = repo;
+            _rendelesek_repo = rendelesek_repo;
+            _termekek_repo = termekek_repo;
         }
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpGet("RendelesId/{id}")]
-        public IActionResult rendelesekId([FromRoute] int id)
+        public async Task<IActionResult> rendelesekId([FromRoute] int id)
         {
-            var rendeles = _ws3.Rendeleseks.Where(r => r.Id == id);
+            var rendeles = await _rendelesek_repo.RendelesekIdAsync(id);
             if (rendeles == null)
             {
                 return BadRequest("Nincs ilyen renelés");
@@ -54,9 +55,9 @@ namespace wshop3.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpGet("OsszesRendeles")]
-        public IActionResult OsszesRendelesek()
+        public async Task<IActionResult> OsszesRendelesek()
         {
-            var rendelesek = _ws3.Rendeleseks;
+            var rendelesek = await _rendelesek_repo.OsszesRendelesekAsync();
 
             if (rendelesek.Count() == 0)
             {
@@ -69,7 +70,7 @@ namespace wshop3.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("RendelesekUj")]
-        public IActionResult RendelesekUjPost([FromBody] RendelesekJson adatok)
+        public async Task<IActionResult> RendelesekUjPost([FromBody] RendelesekJson adatok)
         {
             // {
             //     "FelhasznaloId": 12,
@@ -86,7 +87,7 @@ namespace wshop3.Controllers
             //     ]
             // }
 
-            if (_identity.Users.FirstOrDefault(u => u.Id == adatok.FelhasznaloId) == null)
+            if (await _identity.Users.FirstOrDefaultAsync(u => u.Id == adatok.FelhasznaloId) == null)
             {
                 return BadRequest("Nincs ilyen felhasználó");
             }
@@ -99,18 +100,23 @@ namespace wshop3.Controllers
             foreach (var t in adatok.Termekek)
             {
                 int termekId = t.Id;
-                var termek = _ws3.Termekeks.FirstOrDefault(t => t.Id == termekId);
+                var termek = await _termekek_repo.TermekekIdAsync(termekId);
                 if (termek == null)
                 {
-                    return BadRequest($"Nem létező termék, id: {termekId}");
+                    return BadRequest($"Nem létező termékek");
                 }
                 rendeles.Termeks.Add(termek);
             }
 
-            _ws3.Rendeleseks.Add(rendeles);
-            _ws3.SaveChanges();
-
-            return Ok("Rendeles elfogadva");
+            try
+            {
+                rendeles = await _rendelesek_repo.RendelesekUjAsync(rendeles);
+                return Ok($"rendelés felvétele sikeres: {rendeles.Id}");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Szerver hiba {e.Message}");
+            }
         }
     }
 }

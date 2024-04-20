@@ -15,16 +15,18 @@ namespace wshop3.Controllers
     public class KategoriakController : ControllerBase
     {
         private readonly Wshop3Context _ws3;
-        public KategoriakController(Wshop3Context whop3Context)
+        private readonly IKategoriakRepo _repo;
+        public KategoriakController(Wshop3Context whop3Context, IKategoriakRepo repo)
         {
             _ws3 = whop3Context;
+            _repo = repo;
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("KategoriaId/{id}")]
-        public IActionResult KategoriaId([FromRoute] int id)
+        public async Task<IActionResult> KategoriaId([FromRoute] int id)
         {
-            var kategoria = _ws3.Kategoriaks.FirstOrDefault(k => k.Id == id);
+            var kategoria = await _repo.TermekekIdAsync(id);
             if (kategoria == null)
             {
                 return BadRequest("Nincs ilyen kategória");

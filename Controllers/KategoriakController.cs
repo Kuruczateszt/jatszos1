@@ -14,11 +14,9 @@ namespace wshop3.Controllers
     [Route("api/[controller]")]
     public class KategoriakController : ControllerBase
     {
-        private readonly Wshop3Context _ws3;
         private readonly IKategoriakRepo _repo;
-        public KategoriakController(Wshop3Context whop3Context, IKategoriakRepo repo)
+        public KategoriakController(IKategoriakRepo repo)
         {
-            _ws3 = whop3Context;
             _repo = repo;
         }
 

@@ -27,5 +27,19 @@ namespace wshop3.Datab.repo
 
             return kategoriak;
         }
+
+        public async Task<Kategoriak> KategoriaUjAsync(Kategoriak kategoria)
+        {
+            try
+            {
+                await _ws3.Kategoriaks.AddAsync(kategoria);
+                await _ws3.SaveChangesAsync();
+                return kategoria;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

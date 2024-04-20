@@ -10,5 +10,6 @@ namespace wshop3.Datab
     {
         Task<Kategoriak?> TermekekIdAsync(int id);
         Task<List<Kategoriak>> OsszesKategoriaAsync();
+        Task<Kategoriak> KategoriaUjAsync(Kategoriak kategoria);
     }
 }

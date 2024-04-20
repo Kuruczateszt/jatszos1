@@ -48,7 +48,7 @@ namespace wshop3.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("kategoriaUJ")]
-        public IActionResult kategoriaUj([FromBody] KategoriakDto kategoriaDto)
+        public async Task<IActionResult> kategoriaUj([FromBody] KategoriakDto kategoriaDto)
         {
             if (kategoriaDto.Nev == string.Empty)
             {
@@ -59,9 +59,16 @@ namespace wshop3.Controllers
             {
                 Nev = kategoriaDto.Nev
             };
-            _ws3.Kategoriaks.Add(kategoria);
-            _ws3.SaveChanges();
-            return Ok(kategoria);
+
+            try
+            {
+                kategoria = await _repo.KategoriaUjAsync(kategoria);
+                return Ok($"kategoria felvétele sikeres: {kategoria}");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"Szerver hiba {e.Message}");
+            }
         }
     }
 }

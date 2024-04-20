@@ -102,6 +102,8 @@ builder.Services.AddScoped<ITermekekRepo, TermekekRepo>();
 
 builder.Services.AddScoped<IKategoriakRepo, KategoriakRepo>();
 
+builder.Services.AddScoped<IRendelesekRepo, RendelesekRepo>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 //-------------------------------

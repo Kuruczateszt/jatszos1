@@ -100,6 +100,8 @@ builder.Services.AddDbContext<IdentityContext>(options =>
 
 builder.Services.AddScoped<ITermekekRepo, TermekekRepo>();
 
+builder.Services.AddScoped<IKategoriakRepo, KategoriakRepo>();
+
 builder.Services.AddEndpointsApiExplorer();
 
 //-------------------------------

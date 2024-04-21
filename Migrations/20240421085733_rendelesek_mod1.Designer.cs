@@ -12,8 +12,8 @@ using wshop3.Datab;
 namespace wshop3.Migrations
 {
     [DbContext(typeof(Wshop3Context))]
-    [Migration("20240304145352_teszt1")]
-    partial class teszt1
+    [Migration("20240421085733_rendelesek_mod1")]
+    partial class rendelesek_mod1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace wshop3.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("utf8mb4_hungarian_ci")
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
@@ -81,35 +81,27 @@ namespace wshop3.Migrations
                     b.ToTable("kategoriak", (string)null);
                 });
 
-            modelBuilder.Entity("wshop3.Model.Kosar", b =>
+            modelBuilder.Entity("wshop3.Model.RendelesTermek", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("RendelesId")
                         .HasColumnType("int(11)")
-                        .HasColumnName("id");
+                        .HasColumnName("rendeles_id");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("FelhasznaloId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("felhasznalo_id");
-
-                    b.Property<int?>("Mennyiseg")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("mennyiseg");
-
-                    b.Property<int?>("TermekId")
+                    b.Property<int>("TermekId")
                         .HasColumnType("int(11)")
                         .HasColumnName("termek_id");
 
-                    b.HasKey("Id")
-                        .HasName("PRIMARY");
+                    b.Property<int>("Mennyiseg")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("mennyiseg");
 
-                    b.HasIndex(new[] { "FelhasznaloId" }, "felhasznalo_id");
+                    b.HasKey("RendelesId", "TermekId")
+                        .HasName("PRIMARY")
+                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
 
                     b.HasIndex(new[] { "TermekId" }, "termek_id");
 
-                    b.ToTable("kosar", (string)null);
+                    b.ToTable("rendeles_termek", (string)null);
                 });
 
             modelBuilder.Entity("wshop3.Model.Rendelesek", b =>
@@ -121,26 +113,22 @@ namespace wshop3.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("FelhasznaloId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("felhasznalo_id");
+                    b.Property<string>("FelhasznaloId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("felhasznalo_id")
+                        .UseCollation("utf8mb4_general_ci");
 
-                    b.Property<int?>("Mennyiseg")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("mennyiseg");
-
-                    b.Property<int?>("TermekId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("termek_id");
+                    b.Property<DateTime?>("RendelesIdeje")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp")
+                        .HasColumnName("rendeles_ideje")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "FelhasznaloId" }, "felhasznalo_id")
-                        .HasDatabaseName("felhasznalo_id1");
-
-                    b.HasIndex(new[] { "TermekId" }, "termek_id")
-                        .HasDatabaseName("termek_id1");
+                    b.HasIndex(new[] { "FelhasznaloId" }, "felhasznalo_id");
 
                     b.ToTable("rendelesek", (string)null);
                 });
@@ -165,8 +153,7 @@ namespace wshop3.Migrations
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
-                    b.HasIndex(new[] { "TermekId" }, "termek_id")
-                        .HasDatabaseName("termek_id2");
+                    b.HasIndex(new[] { "TermekId" }, "termek_id2");
 
                     b.ToTable("termek_kepek", (string)null);
                 });
@@ -213,36 +200,21 @@ namespace wshop3.Migrations
                     b.ToTable("termekek", (string)null);
                 });
 
-            modelBuilder.Entity("wshop3.Model.Kosar", b =>
+            modelBuilder.Entity("wshop3.Model.RendelesTermek", b =>
                 {
-                    b.HasOne("wshop3.Model.Felhasznalok", "Felhasznalo")
-                        .WithMany("Kosars")
-                        .HasForeignKey("FelhasznaloId")
-                        .HasConstraintName("kosar_ibfk_1");
+                    b.HasOne("wshop3.Model.Rendelesek", "Rendeles")
+                        .WithMany("RendelesTermeks")
+                        .HasForeignKey("RendelesId")
+                        .IsRequired()
+                        .HasConstraintName("rendeles_termek_ibfk_1");
 
                     b.HasOne("wshop3.Model.Termekek", "Termek")
-                        .WithMany("Kosars")
+                        .WithMany("RendelesTermeks")
                         .HasForeignKey("TermekId")
-                        .HasConstraintName("kosar_ibfk_2");
+                        .IsRequired()
+                        .HasConstraintName("rendeles_termek_ibfk_2");
 
-                    b.Navigation("Felhasznalo");
-
-                    b.Navigation("Termek");
-                });
-
-            modelBuilder.Entity("wshop3.Model.Rendelesek", b =>
-                {
-                    b.HasOne("wshop3.Model.Felhasznalok", "Felhasznalo")
-                        .WithMany("Rendeleseks")
-                        .HasForeignKey("FelhasznaloId")
-                        .HasConstraintName("rendelesek_ibfk_1");
-
-                    b.HasOne("wshop3.Model.Termekek", "Termek")
-                        .WithMany("Rendeleseks")
-                        .HasForeignKey("TermekId")
-                        .HasConstraintName("rendelesek_ibfk_2");
-
-                    b.Navigation("Felhasznalo");
+                    b.Navigation("Rendeles");
 
                     b.Navigation("Termek");
                 });
@@ -264,16 +236,14 @@ namespace wshop3.Migrations
                     b.Navigation("TermekKep");
                 });
 
-            modelBuilder.Entity("wshop3.Model.Felhasznalok", b =>
-                {
-                    b.Navigation("Kosars");
-
-                    b.Navigation("Rendeleseks");
-                });
-
             modelBuilder.Entity("wshop3.Model.Kategoriak", b =>
                 {
                     b.Navigation("Termekeks");
+                });
+
+            modelBuilder.Entity("wshop3.Model.Rendelesek", b =>
+                {
+                    b.Navigation("RendelesTermeks");
                 });
 
             modelBuilder.Entity("wshop3.Model.TermekKepek", b =>
@@ -283,9 +253,7 @@ namespace wshop3.Migrations
 
             modelBuilder.Entity("wshop3.Model.Termekek", b =>
                 {
-                    b.Navigation("Kosars");
-
-                    b.Navigation("Rendeleseks");
+                    b.Navigation("RendelesTermeks");
                 });
 #pragma warning restore 612, 618
         }

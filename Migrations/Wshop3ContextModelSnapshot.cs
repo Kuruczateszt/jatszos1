@@ -18,30 +18,11 @@ namespace wshop3.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .UseCollation("utf8mb4_hungarian_ci")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("RendelesTermek", b =>
-                {
-                    b.Property<int>("RendelesId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("rendeles_id");
-
-                    b.Property<int>("TermekId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("termek_id");
-
-                    b.HasKey("RendelesId", "TermekId")
-                        .HasName("PRIMARY")
-                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                    b.HasIndex(new[] { "TermekId" }, "termek_id");
-
-                    b.ToTable("rendeles_termek", (string)null);
-                });
 
             modelBuilder.Entity("wshop3.Model.Felhasznalok", b =>
                 {
@@ -97,6 +78,29 @@ namespace wshop3.Migrations
                     b.ToTable("kategoriak", (string)null);
                 });
 
+            modelBuilder.Entity("wshop3.Model.RendelesTermek", b =>
+                {
+                    b.Property<int>("RendelesId")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("rendeles_id");
+
+                    b.Property<int>("TermekId")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("termek_id");
+
+                    b.Property<int>("Mennyiseg")
+                        .HasColumnType("int(11)")
+                        .HasColumnName("mennyiseg");
+
+                    b.HasKey("RendelesId", "TermekId")
+                        .HasName("PRIMARY")
+                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+                    b.HasIndex(new[] { "TermekId" }, "termek_id");
+
+                    b.ToTable("rendeles_termek", (string)null);
+                });
+
             modelBuilder.Entity("wshop3.Model.Rendelesek", b =>
                 {
                     b.Property<int>("Id")
@@ -106,28 +110,22 @@ namespace wshop3.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("FelhasznaloId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("felhasznalo_id");
-
-                    b.Property<int?>("Mennyiseg")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("mennyiseg");
+                    b.Property<string>("FelhasznaloId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("felhasznalo_id")
+                        .UseCollation("utf8mb4_general_ci");
 
                     b.Property<DateTime?>("RendelesIdeje")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasColumnName("rendeles_ideje");
-
-                    b.Property<int?>("TermekId")
-                        .HasColumnType("int(11)")
-                        .HasColumnName("termek_id");
+                        .HasColumnName("rendeles_ideje")
+                        .HasDefaultValueSql("current_timestamp()");
 
                     b.HasKey("Id")
                         .HasName("PRIMARY");
 
                     b.HasIndex(new[] { "FelhasznaloId" }, "felhasznalo_id");
-
-                    b.HasIndex(new[] { "TermekId" }, "termek_id1");
 
                     b.ToTable("rendelesek", (string)null);
                 });
@@ -199,27 +197,21 @@ namespace wshop3.Migrations
                     b.ToTable("termekek", (string)null);
                 });
 
-            modelBuilder.Entity("RendelesTermek", b =>
+            modelBuilder.Entity("wshop3.Model.RendelesTermek", b =>
                 {
-                    b.HasOne("wshop3.Model.Rendelesek", null)
-                        .WithMany()
+                    b.HasOne("wshop3.Model.Rendelesek", "Rendeles")
+                        .WithMany("RendelesTermeks")
                         .HasForeignKey("RendelesId")
                         .IsRequired()
                         .HasConstraintName("rendeles_termek_ibfk_1");
 
-                    b.HasOne("wshop3.Model.Termekek", null)
-                        .WithMany()
+                    b.HasOne("wshop3.Model.Termekek", "Termek")
+                        .WithMany("RendelesTermeks")
                         .HasForeignKey("TermekId")
                         .IsRequired()
                         .HasConstraintName("rendeles_termek_ibfk_2");
-                });
 
-            modelBuilder.Entity("wshop3.Model.Rendelesek", b =>
-                {
-                    b.HasOne("wshop3.Model.Termekek", "Termek")
-                        .WithMany("Rendeleseks")
-                        .HasForeignKey("TermekId")
-                        .HasConstraintName("rendelesek_ibfk_2");
+                    b.Navigation("Rendeles");
 
                     b.Navigation("Termek");
                 });
@@ -246,6 +238,11 @@ namespace wshop3.Migrations
                     b.Navigation("Termekeks");
                 });
 
+            modelBuilder.Entity("wshop3.Model.Rendelesek", b =>
+                {
+                    b.Navigation("RendelesTermeks");
+                });
+
             modelBuilder.Entity("wshop3.Model.TermekKepek", b =>
                 {
                     b.Navigation("Termekeks");
@@ -253,7 +250,7 @@ namespace wshop3.Migrations
 
             modelBuilder.Entity("wshop3.Model.Termekek", b =>
                 {
-                    b.Navigation("Rendeleseks");
+                    b.Navigation("RendelesTermeks");
                 });
 #pragma warning restore 612, 618
         }

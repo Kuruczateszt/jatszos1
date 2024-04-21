@@ -24,7 +24,10 @@ namespace wshop3.Datab.repo
 
         public async Task<List<Rendelesek>> OsszesRendelesekAsync()
         {
-            var rendelesek = await _ws3.Rendeleseks.ToListAsync();
+            var rendelesek = await _ws3.Rendeleseks
+            .Include(t => t.RendelesTermeks)
+            .ThenInclude(t => t.Termek)
+            .ToListAsync();
 
             return rendelesek;
         }

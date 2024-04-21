@@ -83,13 +83,37 @@ namespace wshop3.Controllers
                 return BadRequest("Nincsenek termékek");
             }
 
+            var termekek2 = new Dictionary<int, int>();
             foreach (var t in adatok.Termekek)
             {
+                //léteznek -e a termékek
                 if (await _termekek_repo.TermekLetezikEAsync(t.Id) == false)
                 {
                     return BadRequest($"Nem létező termékek");
                 }
+
+                //több azonos termék esetén összeadjuk a mennyiséget a rendeléshez
+                if (termekek2.ContainsKey(t.Id))
+                {
+                    termekek2[t.Id] += t.Mennyiseg;
+                }
+                else
+                {
+                    termekek2.Add(t.Id, t.Mennyiseg);
+                }
             }
+
+            var rendezett_t_lista = new List<TermekRndelesDto>();
+            foreach (var t in termekek2)
+            {
+                rendezett_t_lista.Add(new TermekRndelesDto()
+                {
+                    Id = t.Key,
+                    Mennyiseg = t.Value
+                });
+            }
+
+            adatok.Termekek = rendezett_t_lista;
 
             try
             {
@@ -100,7 +124,6 @@ namespace wshop3.Controllers
             {
                 return StatusCode(500, $"Szerver hiba {e.Message}");
             }
-
         }
     }
 }

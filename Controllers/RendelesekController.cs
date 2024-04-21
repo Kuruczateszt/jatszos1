@@ -13,20 +13,6 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace wshop3.Controllers
 {
-    //rendelések feldolgozásához
-    public class TermekJson
-    {
-        public int Id { get; set; }
-        public int Mennyiseg { get; set; }
-    }
-
-    public class RendelesekJson
-    {
-        public string FelhasznaloId { get; set; } = string.Empty;
-        public List<TermekJson> Termekek { get; set; } = new List<TermekJson>();
-    }
-
-
     [ApiController]
     [Route("api/[controller]")]
     public class RendelesekController : ControllerBase
@@ -70,7 +56,7 @@ namespace wshop3.Controllers
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("RendelesekUj")]
-        public async Task<IActionResult> RendelesekUjPost([FromBody] RendelesekJson adatok)
+        public async Task<IActionResult> RendelesekUjPost([FromBody] RendelesUjDto adatok)
         {
             // {
             //     "FelhasznaloId": 12,
@@ -87,36 +73,34 @@ namespace wshop3.Controllers
             //     ]
             // }
 
-            if (await _identity.Users.FirstOrDefaultAsync(u => u.Id == adatok.FelhasznaloId) == null)
+            if (!await _identity.Users.AnyAsync(u => u.Id == adatok.FelhasznaloId))
             {
                 return BadRequest("Nincs ilyen felhasználó");
             }
 
-            var rendeles = new Rendelesek()
+            if (adatok.Termekek.Count() == 0)
             {
-                FelhasznaloId = adatok.FelhasznaloId,
-            };
+                return BadRequest("Nincsenek termékek");
+            }
 
             foreach (var t in adatok.Termekek)
             {
-                int termekId = t.Id;
-                var termek = await _termekek_repo.TermekekIdAsync(termekId);
-                if (termek == null)
+                if (await _termekek_repo.TermekLetezikEAsync(t.Id) == false)
                 {
                     return BadRequest($"Nem létező termékek");
                 }
-                rendeles.Termeks.Add(termek);
             }
 
             try
             {
-                rendeles = await _rendelesek_repo.RendelesekUjAsync(rendeles);
+                var rendeles = await _rendelesek_repo.RendelesekUjAsync(adatok);
                 return Ok($"rendelés felvétele sikeres: {rendeles.Id}");
             }
             catch (Exception e)
             {
                 return StatusCode(500, $"Szerver hiba {e.Message}");
             }
+
         }
     }
 }

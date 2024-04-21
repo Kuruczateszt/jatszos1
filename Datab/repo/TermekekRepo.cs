@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using wshop3.Datab;
 using wshop3.Dto;
 using wshop3.DtoMap;
 using wshop3.filt;
@@ -24,6 +23,11 @@ namespace wshop3.Datab.repo
             var termek = await _ws3.Termekeks.Include(t => t.Kategoria).Include(t => t.TermekKep).FirstOrDefaultAsync(t => t.Id == id);
 
             return termek;
+        }
+
+        public async Task<bool> TermekLetezikEAsync(int id)
+        {
+            return await _ws3.Termekeks.AnyAsync(t => t.Id == id);
         }
 
         public async Task<List<TermekOsszesLekerdezDto>> TermekListAsync(Szures szur)

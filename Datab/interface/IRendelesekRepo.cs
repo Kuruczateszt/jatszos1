@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using wshop3.Dto;
 using wshop3.Model;
 
 namespace wshop3.Datab
@@ -10,6 +11,6 @@ namespace wshop3.Datab
     {
         Task<Rendelesek?> RendelesekIdAsync(int id);
         Task<List<Rendelesek>> OsszesRendelesekAsync();
-        Task<Rendelesek> RendelesekUjAsync(Rendelesek rendeles);
+        Task<Rendelesek> RendelesekUjAsync(RendelesUjDto rendeles);
     }
 }

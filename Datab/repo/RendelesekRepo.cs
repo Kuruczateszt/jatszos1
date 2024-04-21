@@ -17,7 +17,11 @@ namespace wshop3.Datab.repo
         }
         public async Task<Rendelesek?> RendelesekIdAsync(int id)
         {
-            var rendeles = await _ws3.Rendeleseks.Where(r => r.Id == id).FirstOrDefaultAsync();
+            var rendeles = await _ws3.Rendeleseks
+            .Where(r => r.Id == id)
+            .Include(r => r.RendelesTermeks)
+            .ThenInclude(r => r.Termek)
+            .FirstOrDefaultAsync();
 
             return rendeles;
         }

@@ -21,6 +21,8 @@ public partial class Wshop3Context : DbContext
 
     public virtual DbSet<Kategoriak> Kategoriaks { get; set; }
 
+    public virtual DbSet<RendelesTermek> RendelesTermeks { get; set; }
+
     public virtual DbSet<Rendelesek> Rendeleseks { get; set; }
 
     public virtual DbSet<TermekKepek> TermekKepeks { get; set; }
@@ -67,6 +69,37 @@ public partial class Wshop3Context : DbContext
                 .HasColumnName("nev");
         });
 
+        modelBuilder.Entity<RendelesTermek>(entity =>
+        {
+            entity.HasKey(e => new { e.RendelesId, e.TermekId })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+            entity.ToTable("rendeles_termek");
+
+            entity.HasIndex(e => e.TermekId, "termek_id");
+
+            entity.Property(e => e.RendelesId)
+                .HasColumnType("int(11)")
+                .HasColumnName("rendeles_id");
+            entity.Property(e => e.TermekId)
+                .HasColumnType("int(11)")
+                .HasColumnName("termek_id");
+            entity.Property(e => e.Mennyiseg)
+                .HasColumnType("int(11)")
+                .HasColumnName("mennyiseg");
+
+            entity.HasOne(d => d.Rendeles).WithMany(p => p.RendelesTermeks)
+                .HasForeignKey(d => d.RendelesId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("rendeles_termek_ibfk_1");
+
+            entity.HasOne(d => d.Termek).WithMany(p => p.RendelesTermeks)
+                .HasForeignKey(d => d.TermekId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("rendeles_termek_ibfk_2");
+        });
+
         modelBuilder.Entity<Rendelesek>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -75,53 +108,16 @@ public partial class Wshop3Context : DbContext
 
             entity.HasIndex(e => e.FelhasznaloId, "felhasznalo_id");
 
-            entity.HasIndex(e => e.TermekId, "termek_id1");
-
             entity.Property(e => e.Id)
                 .HasColumnType("int(11)")
                 .HasColumnName("id");
             entity.Property(e => e.FelhasznaloId)
                 .HasColumnName("felhasznalo_id")
                 .UseCollation("utf8mb4_general_ci");
-            entity.Property(e => e.Mennyiseg)
-                .HasColumnType("int(11)")
-                .HasColumnName("mennyiseg");
             entity.Property(e => e.RendelesIdeje)
+                .HasDefaultValueSql("current_timestamp()")
                 .HasColumnType("timestamp")
                 .HasColumnName("rendeles_ideje");
-            entity.Property(e => e.TermekId)
-                .HasColumnType("int(11)")
-                .HasColumnName("termek_id");
-
-            entity.HasOne(d => d.Termek).WithMany(p => p.Rendeleseks)
-                .HasForeignKey(d => d.TermekId)
-                .HasConstraintName("rendelesek_ibfk_2");
-
-            entity.HasMany(d => d.Termeks).WithMany(p => p.Rendeles)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RendelesTermek",
-                    r => r.HasOne<Termekek>().WithMany()
-                        .HasForeignKey("TermekId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("rendeles_termek_ibfk_2"),
-                    l => l.HasOne<Rendelesek>().WithMany()
-                        .HasForeignKey("RendelesId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("rendeles_termek_ibfk_1"),
-                    j =>
-                    {
-                        j.HasKey("RendelesId", "TermekId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-                        j.ToTable("rendeles_termek");
-                        j.HasIndex(new[] { "TermekId" }, "termek_id");
-                        j.IndexerProperty<int>("RendelesId")
-                            .HasColumnType("int(11)")
-                            .HasColumnName("rendeles_id");
-                        j.IndexerProperty<int>("TermekId")
-                            .HasColumnType("int(11)")
-                            .HasColumnName("termek_id");
-                    });
         });
 
         modelBuilder.Entity<TermekKepek>(entity =>

@@ -20,7 +20,7 @@
 
     <script>
         function ÖsszesTermek() {
-            fetch('http://localhost:5130/api/Termekek/OsszesTermek')
+            fetch('http://localhost:5130/api/Termekek/TermekLista')
                 .then(response => response.json())
                 .then(data => {
                     const termekTabla = document.getElementById('termekTabla');

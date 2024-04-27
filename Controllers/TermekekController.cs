@@ -76,7 +76,7 @@ namespace wshop3.Controller
                 var termek = await _repo.TermekTorlesAsync(id);
                 if (termek == null)
                 {
-                    return BadRequest("Nincs ilyen termek");
+                    return BadRequest("Nincs ilyen termek, vagy aktív megrendelés van rá");
                 }
                 return Ok($"A {termek.Nev} sikeresen törölve");
             }

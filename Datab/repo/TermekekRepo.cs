@@ -86,6 +86,12 @@ namespace wshop3.Datab.repo
                     {
                         return null;
                     }
+                    var megrendelesek = _ws3.Rendeleseks.Where(r => r.RendelesTermeks.Any(rt => rt.TermekId == termek.Id)).ToList();
+                    if (megrendelesek.Count > 0)
+                    {
+                        return null;
+                    }
+
                     _ws3.Termekeks.Remove(termek);
                     _ws3.TermekKepeks.Remove(kep);
                     await _ws3.SaveChangesAsync();

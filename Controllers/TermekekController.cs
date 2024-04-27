@@ -71,12 +71,20 @@ namespace wshop3.Controller
         [HttpDelete("TermekTorles/{id}")]
         public async Task<IActionResult> TermekTorles([FromRoute] int id)
         {
-            var termek = await _repo.TermekTorlesAsync(id);
-            if (termek == null)
+            try
             {
-                return BadRequest("Nincs ilyen termek");
+                var termek = await _repo.TermekTorlesAsync(id);
+                if (termek == null)
+                {
+                    return BadRequest("Nincs ilyen termek");
+                }
+                return Ok($"A {termek.Nev} sikeresen törölve");
             }
-            return Ok($"A {termek.Nev} sikeresen törölve");
+            catch (Exception e)
+            {
+                return BadRequest("Szerver hiba " + e.Message);
+            }
+
         }
 
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]

@@ -69,19 +69,35 @@ namespace wshop3.Datab.repo
             return termekekvissza;
         }
 
+        //mivel kép nélkül nem lehet terméket rögzíteni, ezért a törlésnél feltételezhető hogy van kép hozzá.
         public async Task<Termekek?> TermekTorlesAsync(int id)
         {
-            var termek = await _ws3.Termekeks.FirstOrDefaultAsync(t => t.Id == id);
-
-            if (termek == null)
+            using (var t = await _ws3.Database.BeginTransactionAsync())
             {
-                return null;
+                try
+                {
+                    var termek = await _ws3.Termekeks.FirstOrDefaultAsync(t => t.Id == id);
+                    if (termek == null)
+                    {
+                        return null;
+                    }
+                    var kep = await _ws3.TermekKepeks.FirstOrDefaultAsync(t => t.Id == termek.TermekKepId);
+                    if (kep == null)
+                    {
+                        return null;
+                    }
+                    _ws3.Termekeks.Remove(termek);
+                    _ws3.TermekKepeks.Remove(kep);
+                    await _ws3.SaveChangesAsync();
+                    await t.CommitAsync();
+                    return termek;
+                }
+                catch (Exception e)
+                {
+                    await t.RollbackAsync();
+                    throw new Exception(e.Message);
+                }
             }
-
-            _ws3.Termekeks.Remove(termek);
-            await _ws3.SaveChangesAsync();
-
-            return termek;
         }
 
         public async Task<Termekek> TermekUjAsync(Termekek termek, TermekKepek kep)

@@ -32,6 +32,7 @@ namespace wshop3.Controllers
             return StatusCode(201, "Sikeres regisztráció");
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("AssignRole")]
         public async Task<ActionResult> AssignRole([FromBody] RoleDto model)

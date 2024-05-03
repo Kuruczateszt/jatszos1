@@ -27,6 +27,7 @@ namespace wshop3.Controllers
             _termekek_repo = termekek_repo;
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpGet("RendelesId/{id}")]
         public async Task<IActionResult> rendelesekId([FromRoute] int id)
@@ -39,6 +40,7 @@ namespace wshop3.Controllers
             return Ok(rendeles);
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpGet("OsszesRendeles")]
         public async Task<IActionResult> OsszesRendelesek()
@@ -54,6 +56,7 @@ namespace wshop3.Controllers
 
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("RendelesekUj")]
         public async Task<IActionResult> RendelesekUjPost([FromBody] RendelesUjDto adatok)

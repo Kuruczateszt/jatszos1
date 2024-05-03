@@ -38,6 +38,7 @@ namespace wshop3.Controller
             _repo = repo;
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> TermekekId([FromRoute] int id)
@@ -52,6 +53,7 @@ namespace wshop3.Controller
             return Ok(termek);
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("TermekLista")]
         public async Task<IActionResult> TermekLista([FromQuery] Szures szur)
@@ -67,6 +69,7 @@ namespace wshop3.Controller
             return Ok(termekekvissza);
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpDelete("TermekTorles/{id}")]
         public async Task<IActionResult> TermekTorles([FromRoute] int id)
@@ -87,6 +90,7 @@ namespace wshop3.Controller
 
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("TermekUj")]
         public async Task<IActionResult> TermekUj([FromForm] IFormCollection termekAdatok)

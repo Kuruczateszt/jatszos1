@@ -20,6 +20,7 @@ namespace wshop3.Controllers
             _repo = repo;
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("KategoriaId/{id}")]
         public async Task<IActionResult> KategoriaId([FromRoute] int id)
@@ -32,6 +33,7 @@ namespace wshop3.Controllers
             return Ok(kategoria);
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("OsszesKategoria")]
         public async Task<IActionResult> OsszesKategoria()
@@ -44,6 +46,7 @@ namespace wshop3.Controllers
             return Ok(kategoriak);
         }
 
+        [AllowAnonymous]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "ADMIN")]
         [HttpPost("kategoriaUJ")]
         public async Task<IActionResult> kategoriaUj([FromBody] KategoriakDto kategoriaDto)
